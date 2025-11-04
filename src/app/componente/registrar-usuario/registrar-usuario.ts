@@ -23,7 +23,6 @@ export class RegistrarUsuario {
   loading: boolean = false;
 
   onRegister(): void {
-    // Validaciones
     if (!this.validateForm()) {
       return;
     }
@@ -32,29 +31,41 @@ export class RegistrarUsuario {
     this.errorMessage = '';
     this.successMessage = '';
 
-    // Establecer fechas
     this.user.fecha_creacion = new Date();
     this.user.fecha_actualizacion = new Date();
 
-    // Guardar usuario
     this.usuarioService.save(this.user).subscribe({
       next: (savedUser: User) => {
         this.loading = false;
         this.successMessage = 'Usuario registrado exitosamente';
 
-        // Redirigir al login después de 2 segundos
         setTimeout(() => {
           this.router.navigate(['/login']);
         }, 2000);
       },
       error: (error) => {
         this.loading = false;
+        console.error('Error al registrar usuario:', error);
+
         if (error?.status === 409) {
           this.errorMessage = 'El usuario o correo ya existe';
+        } else if (error?.status === 500) {
+          const errorMsg = error?.error?.message || error?.message || '';
+
+          if (errorMsg.includes('usuario_celular_key') || errorMsg.includes('celular')) {
+            this.errorMessage = 'Este número de celular ya está registrado';
+          } else if (errorMsg.includes('usuario_username_key') || errorMsg.includes('username')) {
+            this.errorMessage = 'Este nombre de usuario ya está en uso';
+          } else if (errorMsg.includes('usuario_correo_key') || errorMsg.includes('correo')) {
+            this.errorMessage = 'Este correo electrónico ya está registrado';
+          } else {
+            this.errorMessage = 'Error en el servidor. El usuario no pudo ser creado.';
+          }
+        } else if (error?.status === 400) {
+          this.errorMessage = 'Datos inválidos. Verifica el formulario.';
         } else {
           this.errorMessage = 'Error al registrar usuario. Intente nuevamente';
         }
-        console.error('Error en registro:', error);
       }
     });
   }
@@ -62,7 +73,7 @@ export class RegistrarUsuario {
   validateForm(): boolean {
     // Validar campos vacíos
     if (!this.user.username || !this.user.correo || !this.user.nombres ||
-        !this.user.apellido || !this.user.celular) {
+        !this.user.apellidos || !this.user.celular) {
       this.errorMessage = 'Todos los campos son obligatorios';
       return false;
     }
@@ -86,8 +97,8 @@ export class RegistrarUsuario {
       return false;
     }
 
-    // Validar celular
-    if (this.user.celular <= 0) {
+    // Validar celular (ahora es string)
+    if (!this.user.celular || this.user.celular.trim().length === 0) {
       this.errorMessage = 'Ingrese un número de celular válido';
       return false;
     }

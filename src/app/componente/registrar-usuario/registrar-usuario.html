@@ -39,12 +39,12 @@
 
       <!-- Apellido -->
       <div class="form-group">
-        <label for="apellido">Apellido *</label>
+        <label for="apellidos">Apellidos *</label>
         <input
           type="text"
-          id="apellido"
-          name="apellido"
-          [(ngModel)]="user.apellido"
+          id="apellidos"
+          name="apellidos"
+          [(ngModel)]="user.apellidos"
           (focus)="clearMessages()"
           required
           [disabled]="loading"
@@ -71,11 +71,12 @@
       <div class="form-group">
         <label for="celular">Celular *</label>
         <input
-          type="number"
+          type="text"
           id="celular"
           name="celular"
           [(ngModel)]="user.celular"
           (focus)="clearMessages()"
+          placeholder="Ej: 987654321"
           required
           [disabled]="loading"
           class="form-control"

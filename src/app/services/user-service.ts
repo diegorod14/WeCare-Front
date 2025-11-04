@@ -39,16 +39,15 @@ export class UsuarioService {
     );
   }
 
-  // POST /api/usuario (crea)
   save(dto: User): Observable<User> {
-    return this.http.post<User>(`${this.api}/usuario`, dto)
+    const payload = this.toBackendFormat(dto);
+    return this.http.post<User>(`${this.api}/usuario`, payload)
       .pipe(
         map(this.adaptUser),
         catchError(this.handle)
       );
   }
 
-  // PUT /api/usuario (actualiza; el DTO con id dentro del body)
   update(dto: User): Observable<User> {
     return this.http.put<User>(`${this.api}/usuario`, dto)
       .pipe(
@@ -103,7 +102,6 @@ export class UsuarioService {
     );
   }
 
-  // Normaliza varias formas de listar (array directo o paginado)
   private normalizeList = (resp: any): any[] => {
     if (Array.isArray(resp)) return resp;
     if (!resp || typeof resp !== 'object') return [];
@@ -118,7 +116,6 @@ export class UsuarioService {
     return [];
   };
 
-  // Adapta nombres alternativos de propiedades a nuestro modelo User
   private adaptUser = (raw: any): User => {
     const u = new User();
     if (!raw || typeof raw !== 'object') return u;
@@ -126,11 +123,10 @@ export class UsuarioService {
     u.id = raw.id ?? raw.idUsuario ?? raw.usuarioId ?? raw.userId ?? 0;
     u.username = raw.username ?? raw.userName ?? raw.user_name ?? raw.usuario ?? '';
     u.correo = raw.correo ?? raw.email ?? raw.mail ?? '';
-    u.celular = this.pickNumber(raw, ['celular', 'telefono', 'phone', 'mobile', 'movil', 'cel']);
+    u.celular = String(raw.celular ?? raw.telefono ?? raw.phone ?? raw.mobile ?? raw.movil ?? raw.cel ?? '');
     u.nombres = raw.nombres ?? raw.nombre ?? raw.firstName ?? raw.first_name ?? raw.name ?? '';
-    u.apellido = raw.apellido ?? raw.apellidos ?? raw.lastName ?? raw.last_name ?? raw.surname ?? '';
+    u.apellidos = raw.apellidos ?? raw.apellido ?? raw.lastName ?? raw.last_name ?? raw.surname ?? '';
 
-    // Fecha creación
     if (raw.fecha_creacion) {
       u.fecha_creacion = typeof raw.fecha_creacion === 'string'
         ? new Date(raw.fecha_creacion)
@@ -148,7 +144,6 @@ export class UsuarioService {
         : raw.fechaRegistro;
     }
 
-    // Fecha actualización
     if (raw.fecha_actualizacion) {
       u.fecha_actualizacion = typeof raw.fecha_actualizacion === 'string'
         ? new Date(raw.fecha_actualizacion)
@@ -172,6 +167,33 @@ export class UsuarioService {
       if (typeof n === 'number' && !isNaN(n)) return n;
     }
     return 0;
+  }
+
+  private toBackendFormat(user: User): any {
+    return {
+      id: user.id || null,
+      username: user.username || '',
+      password: user.password || null,
+      correo: user.correo || '',
+      celular: user.celular || '',
+      nombres: user.nombres || '',
+      apellidos: user.apellidos || '',
+      fecha_creacion: this.toLocalDate(user.fecha_creacion),
+      fecha_actualizacion: this.toLocalDate(user.fecha_actualizacion)
+    };
+  }
+
+  private toLocalDate(date: Date | null | undefined): string | null {
+    if (!date) return null;
+    try {
+      const d = date instanceof Date ? date : new Date(date);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    } catch (e) {
+      return null;
+    }
   }
 
   private handle = (err: any) => {

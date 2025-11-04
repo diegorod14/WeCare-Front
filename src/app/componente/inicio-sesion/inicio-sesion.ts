@@ -22,7 +22,6 @@ export class InicioSesion {
   loading: boolean = false;
 
   onLogin(): void {
-    // Validación de campos vacíos
     if (!this.username || !this.password) {
       this.errorMessage = 'Por favor ingrese usuario y contraseña';
       return;
@@ -31,22 +30,31 @@ export class InicioSesion {
     this.loading = true;
     this.errorMessage = '';
 
-    // Buscar usuario por username
     this.usuarioService.findByUsername(this.username).subscribe({
       next: (user: User) => {
         this.loading = false;
 
-        // IMPORTANTE: En producción, la validación de contraseña debe hacerse en el backend
-        // Este es solo un ejemplo básico. Deberías tener un endpoint /api/auth/login
-        if (user && this.password) {
-          // Guardar datos del usuario en localStorage
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          localStorage.setItem('isLoggedIn', 'true');
+        if (!user) {
+          this.errorMessage = 'Usuario no encontrado';
+          return;
+        }
 
-          // Redirigir a la página principal
-          this.router.navigate(['/']);
+        // Validar contraseña
+        if (user.password) {
+          if (user.password === this.password) {
+            // Login exitoso
+            const userToSave = { ...user };
+            delete userToSave.password;
+
+            localStorage.setItem('currentUser', JSON.stringify(userToSave));
+            localStorage.setItem('isLoggedIn', 'true');
+
+            this.router.navigate(['/']);
+          } else {
+            this.errorMessage = 'Usuario o contraseña incorrectos';
+          }
         } else {
-          this.errorMessage = 'Usuario o contraseña incorrectos';
+          this.errorMessage = 'Error: No se puede validar la contraseña';
         }
       },
       error: (error) => {
@@ -66,3 +74,4 @@ export class InicioSesion {
     this.errorMessage = '';
   }
 }
+
