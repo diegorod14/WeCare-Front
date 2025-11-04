@@ -35,7 +35,7 @@ import {CategoriaService} from '../../services/categoria-service';
 })
 export class AlimentoComponent {
   // Columnas: nombre del alimento, nombre de categoría y macronutrientes + calorías
-  displayedColumns: string[] = ['nombre', 'categoria', 'proteinas', 'carbohidratos', 'grasas', 'calorias'];
+  displayedColumns: string[] = ['nombre', 'categoria', 'proteina', 'carbohidrato', 'grasa', 'fibra', 'calorias'];
   dataSource = new MatTableDataSource<Alimento>();
 
   loading = false;
