@@ -1,6 +1,12 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <span>MyCare</span>
+    <a class="brand" [routerLink]="'/'">
+      <img src="/logo.png" alt="MyCare" class="logo" />
+      <span class="brand-text">MyCare</span>
+    </a>
+
+    <span class="spacer"></span>
+
     <button mat-raised-button [routerLink]="'/'">Home</button>
     <button mat-raised-button [routerLink]="'/Alimento'">Alimentos</button>
     <button mat-raised-button [routerLink]="'/NuevoAlimento'">Nuevo Alimento</button>
@@ -8,4 +14,3 @@
     <button mat-raised-button [routerLink]="'/registro'">Registrar Usuario</button>
   </mat-toolbar-row>
 </mat-toolbar>
-
