@@ -34,6 +34,9 @@ export class RegistrarUsuario {
     this.user.fecha_creacion = new Date();
     this.user.fecha_actualizacion = new Date();
 
+    //id=0 puede impedir persistir como nuevo en el backend
+    (this.user as any).id = null;
+
     this.usuarioService.save(this.user).subscribe({
       next: (savedUser: User) => {
         this.loading = false;
