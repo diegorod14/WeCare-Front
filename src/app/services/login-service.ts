@@ -2,7 +2,8 @@ import {inject, Injectable} from '@angular/core';
 import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {RequestDto} from '../model/request-dto';
-import {map, Observable} from 'rxjs';
+import {catchError, map, Observable} from 'rxjs';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import {map, Observable} from 'rxjs';
 export class LoginService {
   private url = environment.apiUrl;
   private http: HttpClient = inject(HttpClient);
+  private router: Router = inject(Router);
   constructor() { }
 
   login(requestDto: RequestDto): Observable<any> {
@@ -27,8 +29,12 @@ export class LoginService {
       }
     ));
   }
-
   getToken(){
     return localStorage.getItem('token');
+  }
+  logout(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('rol');
+    this.router.navigate(['/login']);
   }
 }

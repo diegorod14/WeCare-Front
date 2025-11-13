@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterLink } from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
+import {LoginService} from '../../services/login-service';
 
 @Component({
   selector: 'app-nav-bar-component',
@@ -11,5 +12,20 @@ import { RouterLink } from '@angular/router';
   styleUrl: './nav-bar-component.css',
 })
 export class NavBarComponent {
-
+    router: Router = inject(Router);
+    rol: any;
+  private loginService = inject(LoginService);
+    esNutricionista(): boolean {
+      this.rol = localStorage.getItem('rol');
+      return this.rol === 'ROLE_NUTRICIONISTA';
+    }
+    esUsuario(): boolean {
+      this.rol = localStorage.getItem('rol');
+      return this.rol === 'ROLE_USER';
+    }
+    onLogout(): void {
+      this.loginService.logout();
+      // Forzar actualización de la vista
+      this.rol = null;
+    }
 }
