@@ -50,9 +50,8 @@ export class RegistrarUsuario {
         this.successMessage = 'Usuario registrado exitosamente';
         console.log('Usuario registrado:', response);
 
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 2000);
+        // Siempre dirigir a login después del registro para flujo de autenticación
+        this.router.navigate(['/login']);
       },
       error: (error) => {
         this.loading = false;

@@ -1,7 +1,7 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {MatCard, MatCardContent, MatCardTitle} from '@angular/material/card';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {MatInput, MatInputModule} from '@angular/material/input';
+import {MatInputModule} from '@angular/material/input';
 import {
   MatDatepickerModule,
 } from '@angular/material/datepicker';
@@ -9,7 +9,6 @@ import {MatButton} from '@angular/material/button';
 import {MatNativeDateModule} from '@angular/material/core';
 import {PlatoService} from '../../services/plato-service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Plato} from '../../model/plato';
 
 @Component({
   selector: 'app-plato-nuevo-edit-component',
@@ -27,7 +26,7 @@ import {Plato} from '../../model/plato';
   templateUrl: './plato-nuevo-edit-component.html',
   styleUrl: './plato-nuevo-edit-component.css'
 })
-export class PlatoNuevoEditComponent {
+export class PlatoNuevoEditComponent implements OnInit {
   platoForm : FormGroup;
   fb : FormBuilder = inject(FormBuilder)
   platoService = inject(PlatoService);
@@ -40,7 +39,6 @@ export class PlatoNuevoEditComponent {
       id: [''],
       nombre : ['', Validators.required],
       informacion: ['', Validators.required],
-      user: ['', Validators.required],
       esFavorito: ['', Validators.required],
     });
   }
@@ -54,45 +52,57 @@ export class PlatoNuevoEditComponent {
   }
   cargaForm(){
     if(this.edicion){
-      //llamanos al api para obtener los datos del proveedor x id
       this.platoService.listId(this.id).subscribe({
         next: data => {
           this.platoForm.patchValue({
             id:data.id,
             nombre:data.nombre,
             informacion:data.informacion,
-            user: data.user,
             esFavorito: data.esFavorito,
           })
         }
       })
-      //cargamos esos datos en el form
     }
   }
   onSubmit(){
     if(this.platoForm.valid){
-      let plato = new Plato();
-      //proveedor.nombre = this.proveedorForm.controls['nombre'].value;
-      //proveedor.direccion = this.proveedorForm.controls['direccion'].value;
-      //etc..
-      plato = this.platoForm.value; //resumen
+      const token = localStorage.getItem('token');
+      const userId = token ? this.extractUserIdFromToken(token) : null;
+      if (!userId) {
+        alert('No se pudo obtener el usuario. Inicia sesión nuevamente.');
+        return;
+      }
+      let plato = this.platoForm.value;
+      plato.usuarioId = userId;
       if(!this.edicion){
-        console.log("Datos leidos del form:",plato);
         this.platoService.insert(plato).subscribe({
-          next: data => {
-            console.log("Data insertada:",data);
-            this.router.navigate(['/platos']); //ojo
+          next: () => {
+            this.router.navigate(['/platos']);
+          },
+          error: err => {
+            alert('Error al crear el plato: ' + (err?.error?.message || 'Error desconocido'));
           }
         });
-
       } else{
         this.platoService.update(plato).subscribe({
-          next: data => {
-            console.log("Data actualizada:",data);
-            this.router.navigate(['/platos']); //ojo
+          next: () => {
+            this.router.navigate(['/platos']);
+          },
+          error: err => {
+            alert('Error al actualizar el plato: ' + (err?.error?.message || 'Error desconocido'));
           }
         });
       }
+    }
+  }
+  private extractUserIdFromToken(token: string): number | null {
+    try {
+      const parts = token.split('.');
+      if (parts.length !== 3) return null;
+      const payload = JSON.parse(atob(parts[1]));
+      return payload?.userId || null;
+    } catch (e) {
+      return null;
     }
   }
 }

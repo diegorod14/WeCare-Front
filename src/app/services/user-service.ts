@@ -42,6 +42,24 @@ export class UsuarioService {
     return this.http.post(this.url + "/registrar", usuarioSinId);
   }
 
+  // Buscar usuario por username desde la lista
+  buscarPorUsername(username: string): Observable<User | null> {
+    return new Observable(observer => {
+      this.list().subscribe({
+        next: (usuarios: User[]) => {
+          const usuario = usuarios.find(u => u.username === username);
+          observer.next(usuario || null);
+          observer.complete();
+        },
+        error: (err) => {
+          console.error('Error buscando usuario por username', err);
+          observer.next(null);
+          observer.complete();
+        }
+      });
+    });
+  }
+
   setList(listaNueva : User[]){
     this.listaCambio.next(listaNueva);//enviar la nueva lista a los suscriptores
   }

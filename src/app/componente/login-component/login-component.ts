@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {MatCard, MatCardContent, MatCardTitle} from '@angular/material/card';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
@@ -7,6 +7,8 @@ import {RequestDto} from '../../model/request-dto';
 import {ResponseDto} from '../../model/response-dto';
 import {Router} from '@angular/router';
 import {LoginService} from '../../services/login-service';
+import {UsuarioInformacionService} from '../../services/usuario-informacion-service';
+import {catchError, of} from 'rxjs';
 
 @Component({
   selector: 'app-login-component',
@@ -23,13 +25,12 @@ import {LoginService} from '../../services/login-service';
   templateUrl: './login-component.html',
   styleUrl: './login-component.css'
 })
-export class LoginComponent {
-  username: string = '';
-  password: string = '';
+export class LoginComponent implements OnInit {
   router: Router = inject(Router);
   loginForm: FormGroup;
   fb = inject(FormBuilder);
   loginService: LoginService = inject(LoginService);
+  private usuarioInformacionService = inject(UsuarioInformacionService);
 
   constructor() {
     this.loginForm = this.fb.group({
@@ -39,39 +40,61 @@ export class LoginComponent {
   }
 
   ngOnInit() {
-    if(localStorage.getItem('token')!=null){
-      localStorage.clear();//borra todos los items
-      console.log("Token y items eliminados");
-    }
-    this.loadForm()
-  }
-
-  loadForm(): void {
-    console.log("Form");
+    if (localStorage.getItem('token')) localStorage.clear();
   }
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      const requestDto: RequestDto = new RequestDto()
-      requestDto.username = this.loginForm.value.username;
-      requestDto.password = this.loginForm.value.password;
-      let responseDTO: ResponseDto = new ResponseDto();
-      this.loginService.login(requestDto).subscribe({
-        next: (data: ResponseDto): void => {
-          console.log("Login response ROLs:", data.roles);
-          console.log("Login response ROL:", data.roles[0]);
-          localStorage.setItem('rol', data.roles[0]);
-        },
-        error: (error: any) => {
-          console.error(error);
-          this.router.navigate(['/login']);
-        }
-      })
-      alert("Login ok!")
-      this.router.navigate(['/home'])
-    } else {
-      alert("Formulario no valido!")
-      console.log("Formulario no valido");
+    if (!this.loginForm.valid) { alert('Formulario no válido'); return; }
+
+    const req = new RequestDto();
+    req.username = this.loginForm.value.username;
+    req.password = this.loginForm.value.password;
+
+    this.loginService.login(req).subscribe({
+      next: (data: ResponseDto): void => {
+        if (data?.roles?.[0]) localStorage.setItem('rol', data.roles[0]);
+
+        const token = localStorage.getItem('token');
+        if (!token) { this.router.navigate(['/info']); return; }
+
+        // Extraer userId del JWT
+        const userId = this.extractUserIdFromToken(token);
+        if (!userId) { this.router.navigate(['/info']); return; }
+
+        localStorage.setItem('userId', String(userId));
+        console.log('UserId extraído del JWT:', userId);
+
+        // Verificar si existe usuario-informacion para este userId
+        this.usuarioInformacionService.listId(userId).pipe(
+          catchError((err) => {
+            console.log('Error al buscar usuario-informacion:', err.status);
+            return of(null);
+          })
+        ).subscribe(info => {
+          console.log('Usuario-informacion encontrado:', info);
+          if (!info) {
+            console.log('No existe usuario-informacion, redirigiendo a /info');
+            this.router.navigate(['/info']);
+          } else {
+            console.log('Usuario-informacion existe, redirigiendo a /home');
+            this.router.navigate(['/dashboard']);
+          }
+        });
+      },
+      error: () => this.router.navigate(['/login'])
+    });
+  }
+
+  private extractUserIdFromToken(token: string): number | null {
+    try {
+      const parts = token.split('.');
+      if (parts.length !== 3) return null;
+      const payload = JSON.parse(atob(parts[1]));
+      console.log('JWT payload:', payload);
+      return payload?.userId || null;
+    } catch (e) {
+      console.error('Error decodificando token:', e);
+      return null;
     }
   }
 }
