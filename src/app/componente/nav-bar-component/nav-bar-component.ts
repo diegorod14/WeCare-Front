@@ -3,6 +3,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import {Router, RouterLink} from '@angular/router';
 import {LoginService} from '../../services/login-service';
+import {Plato} from '../../model/plato';
 
 @Component({
   selector: 'app-nav-bar-component',
@@ -28,4 +29,6 @@ export class NavBarComponent {
       // Forzar actualización de la vista
       this.rol = null;
     }
+
+  protected readonly Plato = Plato;
 }
