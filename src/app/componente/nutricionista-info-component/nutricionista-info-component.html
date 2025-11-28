@@ -1,0 +1,90 @@
+<div class="nutri-info-wrapper" *ngIf="nutricionista as n">
+
+  <div class="nutri-info-main">
+
+    <!-- Columna izquierda: foto grande -->
+    <div class="nutri-info-photo">
+      <div class="photo-bg">
+        <img [src]="n.foto_perfil_url" alt="Foto de {{ n.nombre }} {{ n.apellido }}">
+      </div>
+    </div>
+
+    <!-- Columna derecha: información -->
+    <div class="nutri-info-details">
+      <h1 class="nutri-name">
+        Dr. {{ n.nombre }} {{ n.apellido }}
+        <mat-icon class="verified-icon">check_circle</mat-icon>
+      </h1>
+
+      <div class="nutri-specialty">
+        Nutricionista
+      </div>
+
+      <div class="nutri-tags">
+        <span class="tag">
+          {{ n.experiencia_anos }} años de experiencia
+        </span>
+        <span class="tag">
+          Licencia: {{ n.licensia_profesional }}
+        </span>
+      </div>
+
+      <div class="nutri-about">
+        <div class="about-title">
+          About <mat-icon>info</mat-icon>
+        </div>
+        <p>
+          {{ n.biografia }}
+        </p>
+      </div>
+
+      <div class="nutri-pricing">
+        <span>Tarifa consulta: <strong>S/ {{ n.tarifa_consulta }}</strong></span>
+        <span>Tiempo sesión: <strong>{{ n.duracion_consulta_minutos }} minutos</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sección de agenda -->
+  <div class="nutri-schedule-section">
+    <h3>Agendar cita:</h3>
+
+    <!-- Días -->
+    <div class="schedule-days">
+      <button
+        *ngFor="let d of diasAgenda"
+        class="day-chip"
+        [class.day-chip-selected]="d.seleccionado"
+        (click)="seleccionarDia(d)"
+      >
+        <span class="day-label">{{ d.etiquetaDia }}</span>
+        <span class="day-number">{{ d.numeroDia }}</span>
+      </button>
+    </div>
+
+    <!-- Horas -->
+    <div class="schedule-hours">
+      <button
+        *ngFor="let h of horasAgenda"
+        class="hour-chip"
+        [class.hour-chip-selected]="h.seleccionado"
+        (click)="seleccionarHora(h)"
+      >
+        {{ h.etiqueta }}
+      </button>
+    </div>
+
+    <!-- Botón agendar -->
+    <div class="schedule-button">
+      <button
+        mat-raised-button
+        color="primary"
+        class="btn-agendar"
+        (click)="agendar()"
+      >
+        Agendar
+      </button>
+    </div>
+  </div>
+
+</div>

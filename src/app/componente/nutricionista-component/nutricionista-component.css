@@ -36,6 +36,9 @@
   border-radius: 18px;
   overflow: hidden;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
 }
 
 .nutri-img-wrapper {
@@ -82,10 +85,33 @@
   font-size: 12px;
   color: #555;
   min-height: 48px;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .nutri-price {
   font-size: 13px;
   font-weight: 500;
   margin-top: 8px;
+}
+
+.nutri-card mat-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.nutri-card-actions,
+.nutri-card mat-card-actions {
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
+}
+
+.nutri-card mat-card-actions button {
+  min-width: 140px;
 }

@@ -28,6 +28,7 @@ import {UsuarioInformacionService} from '../../services/usuario-informacion-serv
   styleUrls: ['./info-component.css']
 })
 export class InfoComponent implements OnInit {
+  nombreUsuario: string | null = null;
   infoForm!: FormGroup;
   listaNiveles: NivelActividad[] = [];
   loading = false;
@@ -42,6 +43,7 @@ export class InfoComponent implements OnInit {
   ngOnInit() {
     this.buildForm();
     this.loadNiveles();
+    this.nombreUsuario = this.getNombreUsuarioFromToken();
   }
 
   private buildForm() {
@@ -119,6 +121,20 @@ export class InfoComponent implements OnInit {
       return payload?.userId || null;
     } catch (e) {
       console.error('Error decodificando token:', e);
+      return null;
+    }
+  }
+
+  private getNombreUsuarioFromToken(): string | null {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return null;
+      const parts = token.split('.');
+      if (parts.length !== 3) return null;
+      const payload = JSON.parse(atob(parts[1]));
+      // Try common fields: nombres, name, sub, username
+      return payload?.nombres || payload?.name || payload?.username || payload?.sub || null;
+    } catch (e) {
       return null;
     }
   }

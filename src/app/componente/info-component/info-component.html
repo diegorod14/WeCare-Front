@@ -1,5 +1,6 @@
 <mat-card class="example-card">
-  <mat-card-title>Información de Usuario</mat-card-title>
+  <mat-card-title>Bienvenido{{ nombreUsuario ? (', ' + nombreUsuario) : '' }}!</mat-card-title>
+  <div class="card-subtitle">Cuéntanos más de ti para poder brindarte una mejor experiencia.</div>
   <mat-card-content>
     <form [formGroup]="infoForm" class="form-container" (ngSubmit)="onSubmit()">
       <mat-form-field appearance="fill">
@@ -33,7 +34,14 @@
       </mat-form-field>
 
       <div class="actions">
-        <button type="submit" mat-raised-button color="primary" [disabled]="loading">Guardar</button>
+        <button
+          type="submit"
+          mat-raised-button
+          [disabled]="loading || infoForm.invalid"
+          [ngClass]="{ 'btn-enabled': infoForm.valid }"
+        >
+          Guardar
+        </button>
         <button type="button" mat-button (click)="infoForm.reset()" [disabled]="loading">Limpiar</button>
       </div>
 

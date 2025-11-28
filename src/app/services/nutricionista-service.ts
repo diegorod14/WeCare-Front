@@ -14,7 +14,6 @@ export class NutricionistaService {
 
   constructor() { }
 
-  // 🔹 Nuevo método: obtener todos los nutricionistas
   findAll(): Observable<Nutricionista[]> {
     return this.httpClient.get<Nutricionista[]>(this.url + "/nutricionistas");
   }

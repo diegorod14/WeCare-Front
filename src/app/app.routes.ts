@@ -11,6 +11,7 @@ import {InfoComponent} from './componente/info-component/info-component';
 import {ElegirObjetivosComponent} from './componente/elegir-objetivos-component/elegir-objetivos-component';
 import {DashboardComponent} from './componente/dashboard-component/dashboard-component';
 import {NutricionistaComponent} from './componente/nutricionista-component/nutricionista-component';
+import {NutricionistaInfoComponent} from './componente/nutricionista-info-component/nutricionista-info-component';
 
 export const routes: Routes = [
   {path: 'Alimento', component: AlimentoComponent},
@@ -25,6 +26,7 @@ export const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'NuevoAlimento', component: AlimentoNuevoComponent},
   {path: 'ListaNutricionista', component: NutricionistaComponent },
+  {path: 'nutricionista/:id', component: NutricionistaInfoComponent},
   {path: 'home', component: HomeComponent},
   {path: '', component: HomeComponent, pathMatch: 'full'}
 

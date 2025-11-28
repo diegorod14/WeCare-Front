@@ -1,0 +1,172 @@
+.nutri-info-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 16px 60px;
+}
+
+/* Layout principal */
+.nutri-info-main {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  margin-bottom: 40px;
+}
+
+/* Foto */
+.nutri-info-photo {
+  flex: 0 0 280px;
+}
+
+.photo-bg {
+  background: #3cd853;            /* verde del mockup */
+  border-radius: 18px;
+  width: 100%;
+  height: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  overflow: hidden;
+  padding-bottom: 0;
+}
+
+.photo-bg img {
+  height: 100%;
+  max-width: 90%;
+  object-fit: contain;
+  transform: translateY(8px);
+}
+
+/* Detalles */
+.nutri-info-details {
+  flex: 1;
+}
+
+.nutri-name {
+  font-size: 26px;
+  font-weight: 600;
+  margin: 0 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.verified-icon {
+  font-size: 20px;
+  color: #1e90ff;
+}
+
+.nutri-specialty {
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.nutri-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tag {
+  border-radius: 999px;
+  border: 1px solid #ddd;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: #555;
+}
+
+.nutri-about .about-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nutri-about p {
+  margin: 0;
+  color: #555;
+  line-height: 1.5;
+}
+
+.nutri-pricing {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  font-size: 14px;
+}
+
+/* Agenda */
+.nutri-schedule-section h3 {
+  margin-bottom: 16px;
+}
+
+.schedule-days {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.day-chip {
+  border-radius: 999px;
+  border: 1px solid #ddd;
+  background: #fff;
+  padding: 10px 16px;
+  cursor: pointer;
+  outline: none;
+  min-width: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+}
+
+.day-label {
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.day-number {
+  font-size: 14px;
+}
+
+.day-chip-selected {
+  background: #3cd853;
+  border-color: #3cd853;
+  color: #fff;
+}
+
+.schedule-hours {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.hour-chip {
+  border-radius: 999px;
+  border: 1px solid #ddd;
+  background: #fff;
+  padding: 6px 14px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.hour-chip-selected {
+  background: #3cd853;
+  border-color: #3cd853;
+  color: #fff;
+}
+
+.schedule-button {
+  text-align: center;
+}
+
+.btn-agendar {
+  padding: 10px 60px;
+  border-radius: 999px;
+  font-size: 16px;
+}

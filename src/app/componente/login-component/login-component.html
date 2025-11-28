@@ -1,18 +1,51 @@
 <mat-card class="example-card">
   <mat-card-title>Login</mat-card-title>
+
   <mat-card-content>
-    <form [formGroup]="loginForm" class="form-container" (ngSubmit)="onSubmit()">
+    <form
+      [formGroup]="loginForm"
+      class="form-container"
+      (ngSubmit)="onSubmit()"
+    >
       <mat-form-field appearance="fill">
         <mat-label>Usuario</mat-label>
-        <input matInput formControlName="username" placeholder="Ingrese su usuario" />
+        <input
+          matInput
+          formControlName="username"
+          placeholder="Ingrese su usuario"
+        />
+        <mat-error *ngIf="loginForm.get('username')?.hasError('required')">
+          El usuario es obligatorio
+        </mat-error>
+        <mat-error *ngIf="loginForm.get('username')?.hasError('minlength')">
+          Mínimo 3 caracteres
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="fill">
         <mat-label>Password</mat-label>
-        <input matInput type="password" formControlName="password" placeholder="Ingrese su password" />
+        <input
+          matInput
+          type="password"
+          formControlName="password"
+          placeholder="Ingrese su contraseña"
+        />
+        <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+          La contraseña es obligatoria
+        </mat-error>
+        <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">
+          Mínimo 6 caracteres
+        </mat-error>
       </mat-form-field>
 
-      <button type="submit" mat-raised-button color="primary">Registrar</button>
+      <button
+        type="submit"
+        mat-raised-button
+        [disabled]="loginForm.invalid"
+        [ngClass]="{ 'btn-enabled': loginForm.valid }"
+      >
+        Registrar
+      </button>
     </form>
   </mat-card-content>
 </mat-card>

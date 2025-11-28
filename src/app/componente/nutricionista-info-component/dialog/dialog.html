@@ -1,0 +1,40 @@
+<h2 mat-dialog-title class="dialog-title">Completar datos de la cita</h2>
+
+<div mat-dialog-content class="dialog-content">
+  <!-- Tipo de consulta -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Tipo de consulta</mat-label>
+    <mat-select [(ngModel)]="data.tipo_consulta">
+      <mat-option *ngFor="let t of tiposConsulta" [value]="t.value">
+        {{ t.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Motivo (más bajito y auto-ajustable) -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Motivo de la consulta</mat-label>
+    <textarea
+      matInput
+      cdkTextareaAutosize
+      cdkAutosizeMinRows="2"
+      cdkAutosizeMaxRows="5"
+      [(ngModel)]="data.motivo_consulta"
+      placeholder="Ej: Evaluación inicial para pérdida de peso"
+    ></textarea>
+  </mat-form-field>
+
+  <!-- Estado fijo al final -->
+  <div class="estado-info" aria-label="Estado fijo de la cita">
+    <mat-icon color="primary">event_available</mat-icon>
+    <div>
+      <div class="estado-label">Estado asignado</div>
+      <div class="estado-value">Programada</div>
+    </div>
+  </div>
+</div>
+
+<div mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="guardar()">Guardar</button>
+</div>

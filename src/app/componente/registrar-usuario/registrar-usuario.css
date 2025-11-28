@@ -9,8 +9,8 @@
   content:"";
   position:absolute;
   left:0; top:0; bottom:0;
-  width:55%;
-  background:url("/assets/LandingPage.png") center/cover no-repeat;
+  width:40%;
+  background:url("/assets/Registrar.png") center/cover no-repeat;
 }
 .register-card{
   grid-column:2;
