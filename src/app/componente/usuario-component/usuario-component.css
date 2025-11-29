@@ -1,0 +1,74 @@
+.usuario-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 16px 60px;
+}
+
+.usuario-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.usuario-subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 24px;
+}
+
+.usuario-search {
+  width: 100%;
+  max-width: 480px;
+  display: block;
+  margin: 0 auto 32px;
+}
+
+.usuario-card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.usuario-card {
+  border-radius: 16px;
+  min-height: 170px;
+  display: flex;
+  flex-direction: column;
+}
+
+.usuario-name {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.usuario-username {
+  font-size: 14px;
+  color: #888;
+  margin: 4px 0 8px;
+}
+
+.usuario-contact {
+  font-size: 13px;
+  color: #555;
+}
+
+.usuario-card mat-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.usuario-card-actions {
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 12px;
+}
+
+.usuario-empty {
+  text-align: center;
+  color: #777;
+}
+

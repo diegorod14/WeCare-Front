@@ -86,7 +86,7 @@ export class LoginComponent implements OnInit {
         ).subscribe(info => {
           console.log('Usuario-informacion encontrado:', info);
           if (!info) {
-            console.log('No existe usuario-informacion, redirigiendo a /info');
+            console.log('No existe usuario-informacion, redirigiendo a /usuarioinfo');
             this.router.navigate(['/info']);
           } else {
             console.log('Usuario-informacion existe, redirigiendo a /dashboard');

@@ -60,6 +60,10 @@ export class UsuarioService {
     });
   }
 
+  findUsername(id: number): Observable<string> {
+    return this.http.get(`${this.url}/usuario/${id}/username`, { responseType: 'text' });
+  }
+
   setList(listaNueva : User[]){
     this.listaCambio.next(listaNueva);//enviar la nueva lista a los suscriptores
   }

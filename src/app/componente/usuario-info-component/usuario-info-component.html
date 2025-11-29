@@ -1,0 +1,151 @@
+<div class="usuario-info-page" *ngIf="info && ingesta; else loadingTpl">
+  <button class="back-button" (click)="onBack()">⟵ Regresar</button>
+  <!-- FILA SUPERIOR: tarjeta celeste (info usuario) + tarjeta roja (macros) -->
+  <div class="cards-row top-row">
+    <!-- Cuadro celeste: información básica del usuario -->
+    <mat-card class="card info-card">
+      <mat-card-title> Información del usuario </mat-card-title>
+      <mat-card-subtitle>
+        {{ usuario?.nombres }} {{ usuario?.apellidos }}
+      </mat-card-subtitle>
+
+      <mat-card-content>
+         <div class="info-line">
+           <span class="label">Edad:</span>
+           <span>{{ edad }} años</span>
+         </div>
+
+         <div class="info-line">
+           <span class="label">Género:</span>
+           <span>{{ usuario?.genero }}</span>
+         </div>
+
+         <div class="info-line">
+           <span class="label">Fecha de nacimiento:</span>
+           <span>{{ info.fechaNacimiento | date:'dd/MM/yyyy' }}</span>
+         </div>
+
+         <div class="info-line">
+           <span class="label">Altura:</span>
+           <span>{{ info.alturaCm | number:'1.0-2' }} cm</span>
+         </div>
+
+         <div class="info-line">
+           <span class="label">Peso:</span>
+           <span>{{ info.pesoKg | number:'1.0-2' }} kg</span>
+         </div>
+
+         <div class="info-line">
+           <span class="label">Nivel de actividad:</span>
+           <span>{{ nivelActividad?.nombre }}</span>
+         </div>
+
+         <div class="info-line" *ngIf="nivelActividad?.informacion">
+           <span class="label">Descripción actividad:</span>
+           <span>{{ nivelActividad?.informacion }}</span>
+         </div>
+       </mat-card-content>
+    </mat-card>
+
+    <!-- Cuadro rojo: dashboard de macronutrientes -->
+    <mat-card class="card macros-card">
+      <mat-card-title class="macros-header">
+        <span class="macros-title">Ingesta diaria recomendada</span>
+        <span class="imc-tag">
+          IMC: {{ ingesta.imc | number:'1.0-2' }}
+          <span class="imc-category">
+            {{ getImcCategoria() }}
+          </span>
+        </span>
+      </mat-card-title>
+
+      <mat-card-subtitle class="macros-subtitle">
+        {{ ingesta.ingestaDiariaCalorias | number:'1.0-2' }} kcal/día
+      </mat-card-subtitle>
+
+      <mat-card-content>
+        <div class="macros-container">
+          <div class="chart-section">
+            <div class="donut-chart" [style.background]="chartGradient">
+              <div class="center-hole">
+                <span class="total-kcal">
+                  {{ ingesta.ingestaDiariaCalorias | number:'1.0-0' }}
+                </span>
+                <span class="unit">Kcal</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="legend-section">
+            <div class="legend-item">
+              <div class="legend-indicator" style="background-color: #4caf50;"></div>
+              <div class="legend-text">
+                <span class="legend-label">Proteína</span>
+                <span class="legend-value">
+                  {{ ingesta.ingestaDiariaProteina | number:'1.0-1' }}g
+                  ({{ macrosPercent.proteina | number:'1.0-0' }}%)
+                </span>
+              </div>
+            </div>
+
+            <div class="legend-item">
+              <div class="legend-indicator" style="background-color: #ff9800;"></div>
+              <div class="legend-text">
+                <span class="legend-label">Carbohidratos</span>
+                <span class="legend-value">
+                  {{ ingesta.ingestaDiariaCarbohidrato | number:'1.0-1' }}g
+                  ({{ macrosPercent.carbohidrato | number:'1.0-0' }}%)
+                </span>
+              </div>
+            </div>
+
+            <div class="legend-item">
+              <div class="legend-indicator" style="background-color: #f44336;"></div>
+              <div class="legend-text">
+                <span class="legend-label">Grasas</span>
+                <span class="legend-value">
+                  {{ ingesta.ingestaDiariaGrasa | number:'1.0-1' }}g
+                  ({{ macrosPercent.grasa | number:'1.0-0' }}%)
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="macro-extra">
+          <div class="extra-item">
+            <span class="label">Peso ideal:</span>
+            <span>{{ ingesta.pesoIdeal | number:'1.0-2' }} kg</span>
+          </div>
+
+          <div class="extra-item">
+            <span class="label">Diferencia:</span>
+            <span [ngClass]="{ 'peso-up': pesoDifference > 0, 'peso-down': pesoDifference < 0 }">
+              {{ pesoDifference | number:'1.0-2' }} kg
+            </span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- FILA INFERIOR: cuadro azul grande -->
+  <div class="cards-row">
+    <mat-card class="card objetivo-card">
+      <mat-card-title> Objetivo del usuario </mat-card-title>
+
+      <mat-card-content>
+        <div class="info-line">
+          <span class="label">Objetivo seleccionado:</span>
+          <span>{{ objetivoDetalle?.nombre || 'Sin objetivo' }}</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="loading">
+    Cargando información del usuario...
+  </div>
+</ng-template>

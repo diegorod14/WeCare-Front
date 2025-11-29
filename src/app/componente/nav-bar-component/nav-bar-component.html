@@ -15,6 +15,7 @@
       <button mat-raised-button color="warn" (click)="onLogout()">Cerrar Sesión</button>
     }
     @if(esNutricionista()) {
+      <button mat-raised-button [routerLink]="'/usuarios'">Usuarios</button>
       <button mat-raised-button color="warn" (click)="onLogout()">Cerrar Sesión</button>
     }
     @if(!esUsuario() && !esNutricionista()) {
@@ -23,3 +24,4 @@
     }
   </mat-toolbar-row>
 </mat-toolbar>
+

@@ -1,0 +1,28 @@
+<div class="usuario-wrapper">
+  <h1 class="usuario-title">Usuarios registrados</h1>
+  <p class="usuario-subtitle">Busca a un usuario y revisa su información básica</p>
+
+  <mat-form-field class="usuario-search" appearance="outline">
+    <mat-icon matPrefix>search</mat-icon>
+    <input matInput placeholder="Buscar usuario" (keyup)="onBuscar($event)" />
+  </mat-form-field>
+
+  <div class="usuario-card-container" *ngIf="filteredUsuarios.length; else emptyState">
+    <mat-card class="usuario-card" *ngFor="let u of filteredUsuarios">
+      <mat-card-content>
+        <div class="usuario-name">{{ u.nombres }} {{ u.apellidos }}</div>
+        <div class="usuario-username">@{{ u.username }}</div>
+        <p class="usuario-contact">{{ u.correo }} · {{ u.celular }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-stroked-button color="primary" (click)="verDetalle(u.id)">
+          Más información
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <ng-template #emptyState>
+    <p class="usuario-empty">No se encontraron usuarios.</p>
+  </ng-template>
+</div>
