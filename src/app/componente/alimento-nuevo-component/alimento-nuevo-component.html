@@ -37,7 +37,7 @@
       <mat-form-field appearance="outline">
         <mat-label>Categoría</mat-label>
         <mat-select formControlName="categoriaId" placeholder="Selecciona una categoría">
-          <mat-option *ngFor="let c of categorias" [value]="c.idCategoria">{{ c.nombre }}</mat-option>
+          <mat-option *ngFor="let c of categorias" [value]="c.id">{{ c.nombre }}</mat-option>
         </mat-select>
         <mat-error *ngIf="alimentoForm.get('categoriaId')?.hasError('required')">Seleccione una categoría</mat-error>
       </mat-form-field>

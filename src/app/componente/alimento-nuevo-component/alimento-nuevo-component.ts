@@ -58,21 +58,22 @@ export class AlimentoNuevoComponent implements OnInit {
   private loadCategorias() {
     this.categoriaService.findAll().subscribe({
       next: (cats) => {
-        console.log(' Categorías recibidas de la API:', cats);
+        console.log('📦 Categorías recibidas de la API:', cats);
         const list = cats ?? [];
         this.categorias = list
           .map((c: any) => {
-            const id = c?.idCategoria ?? c?.categoria_id ?? c?.categoriaId ?? c?.id ?? null;
+            const id = c?.id ?? c?.idCategoria ?? c?.categoria_id ?? c?.categoriaId ?? null;
             return {
-              ...c,
-              idCategoria: id !== null && id !== undefined ? Number(id) : null
+              id: id !== null && id !== undefined ? Number(id) : undefined,
+              nombre: c?.nombre ?? '',
+              informacion: c?.informacion ?? ''
             } as Categoria;
           })
-          .filter((c: Categoria) => c.idCategoria != null);
-        console.log(' Categorías procesadas:', this.categorias);
+          .filter((c: Categoria) => c.id != null);
+        console.log('✅ Categorías procesadas:', this.categorias);
       },
       error: (err) => {
-        console.error(' Error cargando categorías', err);
+        console.error('❌ Error cargando categorías', err);
         this.categorias = [];
       }
     });

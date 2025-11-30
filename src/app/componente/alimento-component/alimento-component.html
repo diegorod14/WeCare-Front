@@ -1,63 +1,262 @@
-<div class="mat-elevation-z8">
-  <table mat-table [dataSource]="dataSource">
+<div class="alimento-container">
+  <!-- Encabezado -->
+  <div class="header">
+    <h1>Gestión de Alimentos</h1>
+    <div class="header-actions">
+      <button mat-raised-button color="accent" routerLink="/dashboard">
+        <mat-icon>dashboard</mat-icon>
+        Ver Dashboard
+      </button>
+      <button mat-raised-button color="primary" (click)="nuevoAlimento()" *ngIf="!mostrarFormulario">
+        <mat-icon>add</mat-icon>
+        Nuevo Alimento
+      </button>
+    </div>
+  </div>
 
-    <!-- Nombre Alimento -->
-    <ng-container matColumnDef="nombre">
-      <th mat-header-cell *matHeaderCellDef> Alimento </th>
-      <td mat-cell *matCellDef="let element"> {{ element.nombre }} </td>
-    </ng-container>
+  <!-- Filtros -->
+  <mat-card class="filtros-card" *ngIf="!mostrarFormulario">
+    <mat-card-content>
+      <div class="filtros-container">
+        <mat-form-field appearance="outline" class="filtro-field">
+          <mat-label>Buscar por nombre</mat-label>
+          <input matInput [(ngModel)]="filtroNombre" (ngModelChange)="aplicarFiltros()" placeholder="Nombre del alimento">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
 
-    <!-- Categoria.nombre -->
-    <ng-container matColumnDef="categoria">
-      <th mat-header-cell *matHeaderCellDef> Categoría </th>
-      <td mat-cell *matCellDef="let element"> {{ element.categoria?.nombre }} </td>
-    </ng-container>
+        <mat-form-field appearance="outline" class="filtro-field">
+          <mat-label>Filtrar por categoría</mat-label>
+          <mat-select [(ngModel)]="filtroCategoria" (ngModelChange)="aplicarFiltros()">
+            <mat-option value="">Todas las categorías</mat-option>
+            <mat-option *ngFor="let categoria of categorias" [value]="categoria.nombre">
+              {{ categoria.nombre }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matSuffix>filter_list</mat-icon>
+        </mat-form-field>
 
-    <!-- Proteínas -->
-    <ng-container matColumnDef="proteina">
-      <th mat-header-cell *matHeaderCellDef> Proteínas (g) </th>
-      <td mat-cell *matCellDef="let element"> {{ element.proteina }} </td>
-    </ng-container>
+        <button mat-raised-button color="accent" (click)="buscarPorCategoria()" [disabled]="!filtroCategoria">
+          <mat-icon>search</mat-icon>
+          Buscar por Categoría
+        </button>
 
-    <!-- Carbohidratos -->
-    <ng-container matColumnDef="carbohidrato">
-      <th mat-header-cell *matHeaderCellDef> Carbohidratos (g) </th>
-      <td mat-cell *matCellDef="let element"> {{ element.carbohidrato }} </td>
-    </ng-container>
+        <button mat-button (click)="limpiarFiltros()">
+          <mat-icon>clear</mat-icon>
+          Limpiar Filtros
+        </button>
+      </div>
 
-    <!-- Grasas -->
-    <ng-container matColumnDef="grasa">
-      <th mat-header-cell *matHeaderCellDef> Grasas (g) </th>
-      <td mat-cell *matCellDef="let element"> {{ element.grasa }} </td>
-    </ng-container>
+      <!-- Chips con resumen -->
+      <div class="resumen-chips">
+        <mat-chip-set>
+          <mat-chip>
+            Total: {{ alimentosFiltrados.length }} alimento(s)
+          </mat-chip>
+          <mat-chip *ngIf="filtroCategoria" color="primary">
+            Categoría: {{ filtroCategoria }}
+          </mat-chip>
+        </mat-chip-set>
+      </div>
+    </mat-card-content>
+  </mat-card>
 
-    <!-- Fibra -->
-    <ng-container matColumnDef="fibra">
-      <th mat-header-cell *matHeaderCellDef> Fibra (g) </th>
-      <td mat-cell *matCellDef="let element"> {{ element.fibra }} </td>
-    </ng-container>
+  <!-- Formulario de creación/edición -->
+  <mat-card class="formulario-card" *ngIf="mostrarFormulario">
+    <mat-card-header>
+      <mat-card-title>
+        {{ modoEdicion ? 'Editar Alimento' : 'Nuevo Alimento' }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form class="formulario-alimento">
+        <!-- Nombre -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nombre del alimento</mat-label>
+          <input matInput [(ngModel)]="alimentoSeleccionado.nombre" name="nombre" required>
+          <mat-icon matSuffix>restaurant</mat-icon>
+        </mat-form-field>
 
-    <!-- Calorías -->
-    <ng-container matColumnDef="calorias">
-      <th mat-header-cell *matHeaderCellDef> Calorías (kcal) </th>
-      <td mat-cell *matCellDef="let element"> {{ element.calorias }} </td>
-    </ng-container>
+        <!-- Categoría -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Categoría</mat-label>
+          <mat-select [(ngModel)]="alimentoSeleccionado.categoriaId" name="categoria" required>
+            <mat-option *ngFor="let categoria of categorias" [value]="categoria.id">
+              {{ categoria.nombre }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matSuffix>category</mat-icon>
+        </mat-form-field>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <!-- Valores nutricionales -->
+        <div class="valores-nutricionales">
+          <h3>Valores Nutricionales (por 100g)</h3>
 
-    <!-- Estado: sin datos -->
-    <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" [attr.colspan]="displayedColumns.length">
-        <ng-container *ngIf="!loading && !error">No hay alimentos para mostrar.</ng-container>
-        <ng-container *ngIf="loading">Cargando alimentos...</ng-container>
-        <ng-container *ngIf="error">{{ error }}</ng-container>
-      </td>
-    </tr>
-  </table>
+          <div class="nutrientes-grid">
+            <mat-form-field appearance="outline">
+              <mat-label>Proteína (g)</mat-label>
+              <input matInput type="number" [(ngModel)]="alimentoSeleccionado.proteina" name="proteina" min="0" step="0.1">
+              <mat-icon matSuffix>fitness_center</mat-icon>
+            </mat-form-field>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-                 showFirstLastButtons
-                 aria-label="Paginador de alimentos">
-  </mat-paginator>
+            <mat-form-field appearance="outline">
+              <mat-label>Carbohidrato (g)</mat-label>
+              <input matInput type="number" [(ngModel)]="alimentoSeleccionado.carbohidrato" name="carbohidrato" min="0" step="0.1">
+              <mat-icon matSuffix>grain</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Grasa (g)</mat-label>
+              <input matInput type="number" [(ngModel)]="alimentoSeleccionado.grasa" name="grasa" min="0" step="0.1">
+              <mat-icon matSuffix>water_drop</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Fibra (g)</mat-label>
+              <input matInput type="number" [(ngModel)]="alimentoSeleccionado.fibra" name="fibra" min="0" step="0.1">
+              <mat-icon matSuffix>eco</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Calorías (kcal)</mat-label>
+              <input matInput type="number" [(ngModel)]="alimentoSeleccionado.calorias" name="calorias" min="0" step="1">
+              <mat-icon matSuffix>local_fire_department</mat-icon>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-button (click)="cancelar()" [disabled]="cargando">
+        <mat-icon>cancel</mat-icon>
+        Cancelar
+      </button>
+      <button mat-raised-button color="primary" (click)="guardarAlimento()" [disabled]="cargando">
+        <mat-icon>save</mat-icon>
+        {{ modoEdicion ? 'Actualizar' : 'Guardar' }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <!-- Tabla de alimentos -->
+  <mat-card class="tabla-card" *ngIf="!mostrarFormulario">
+    <mat-card-content>
+      <!-- Loading -->
+      <div *ngIf="cargando" class="loading-container">
+        <mat-icon class="spinner">refresh</mat-icon>
+        <p>Cargando...</p>
+      </div>
+
+      <!-- Tabla -->
+      <div *ngIf="!cargando" class="tabla-container">
+        <table mat-table [dataSource]="alimentosPaginados" class="tabla-alimentos">
+          <!-- Columna Nombre -->
+          <ng-container matColumnDef="nombre">
+            <th mat-header-cell *matHeaderCellDef>Nombre</th>
+            <td mat-cell *matCellDef="let alimento">
+              <strong>{{ alimento.nombre }}</strong>
+            </td>
+          </ng-container>
+
+          <!-- Columna Proteína -->
+          <ng-container matColumnDef="proteina">
+            <th mat-header-cell *matHeaderCellDef>Proteína (g)</th>
+            <td mat-cell *matCellDef="let alimento">
+              {{ alimento.proteina | number:'1.1-1' }}
+            </td>
+          </ng-container>
+
+          <!-- Columna Carbohidrato -->
+          <ng-container matColumnDef="carbohidrato">
+            <th mat-header-cell *matHeaderCellDef>Carbohidrato (g)</th>
+            <td mat-cell *matCellDef="let alimento">
+              {{ alimento.carbohidrato | number:'1.1-1' }}
+            </td>
+          </ng-container>
+
+          <!-- Columna Grasa -->
+          <ng-container matColumnDef="grasa">
+            <th mat-header-cell *matHeaderCellDef>Grasa (g)</th>
+            <td mat-cell *matCellDef="let alimento">
+              {{ alimento.grasa | number:'1.1-1' }}
+            </td>
+          </ng-container>
+
+          <!-- Columna Fibra -->
+          <ng-container matColumnDef="fibra">
+            <th mat-header-cell *matHeaderCellDef>Fibra (g)</th>
+            <td mat-cell *matCellDef="let alimento">
+              {{ alimento.fibra | number:'1.1-1' }}
+            </td>
+          </ng-container>
+
+          <!-- Columna Calorías -->
+          <ng-container matColumnDef="calorias">
+            <th mat-header-cell *matHeaderCellDef>Calorías (kcal)</th>
+            <td mat-cell *matCellDef="let alimento">
+              <span class="calorias-badge">{{ alimento.calorias | number:'1.0-0' }}</span>
+            </td>
+          </ng-container>
+
+          <!-- Columna Categoría -->
+          <ng-container matColumnDef="categoria">
+            <th mat-header-cell *matHeaderCellDef>Categoría</th>
+            <td mat-cell *matCellDef="let alimento">
+              <mat-chip [matTooltip]="alimento.categoriaInformacion || ''">
+                {{ alimento.categoriaNombre }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Columna Consumir -->
+          <ng-container matColumnDef="consumir">
+            <th mat-header-cell *matHeaderCellDef>Consumir</th>
+            <td mat-cell *matCellDef="let alimento">
+              <button mat-raised-button color="accent" (click)="abrirDialogoConsumo(alimento)" matTooltip="Registrar consumo">
+                <mat-icon>restaurant</mat-icon>
+                Consumir
+              </button>
+            </td>
+          </ng-container>
+
+          <!-- Columna Acciones -->
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let alimento">
+              <button mat-icon-button color="primary" (click)="editarAlimento(alimento)" matTooltip="Editar">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="eliminarAlimento(alimento)" matTooltip="Eliminar">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          <!-- Mensaje sin datos -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              <div class="sin-datos">
+                <mat-icon>info</mat-icon>
+                <p>No se encontraron alimentos</p>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Paginador -->
+      <mat-paginator
+        *ngIf="!cargando"
+        [length]="alimentosFiltrados.length"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"
+        [pageIndex]="pageIndex"
+        (page)="onPageChange($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    </mat-card-content>
+  </mat-card>
 </div>
+

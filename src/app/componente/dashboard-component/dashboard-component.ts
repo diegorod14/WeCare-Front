@@ -1,6 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { RouterModule } from '@angular/router';
 import { UsuarioInformacion } from '../../model/usuario-informacion';
 import { UsuarioIngesta } from '../../model/usuario-ingesta';
 import { Objetivo } from '../../model/objetivo';
@@ -9,6 +12,9 @@ import { UsuarioInformacionService } from '../../services/usuario-informacion-se
 import { UsuarioIngestaService } from '../../services/usuario-ingesta-service';
 import { UsuarioObjetivoServices } from '../../services/usuario-objetivo-services';
 import { ObjetivoServices } from '../../services/objetivo-services';
+import { ComerService } from '../../services/comer-service';
+import { ResumenDiario } from '../../model/resumen-diario';
+import { ProgresoNutricional } from '../../model/progreso-nutricional';
 
 interface MacroItem {
   label: string;
@@ -20,7 +26,7 @@ interface MacroItem {
 @Component({
   selector: 'app-dashboard-component',
   standalone: true,
-  imports: [CommonModule, MatCardModule],
+  imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, RouterModule],
   templateUrl: './dashboard-component.html',
   styleUrl: './dashboard-component.css'
 })
@@ -39,6 +45,19 @@ export class DashboardComponent implements OnInit {
   macros: MacroItem[] = [];
   macroPieGradient = '';
 
+  // Progreso nutricional del día
+  resumenDiario?: ResumenDiario;
+  progresoNutricional?: ProgresoNutricional;
+  cargandoProgreso: boolean = false;
+  errorProgreso: string = '';
+
+  // Macros consumidos del día
+  macrosConsumidos: MacroItem[] = [];
+  macrosConsumidosGradient = '';
+
+  // Exponer Math para el template
+  Math = Math;
+
   // Colores (Extraídos de tu imagen referencia)
   readonly COLORS = {
     pro: '#66bb6a', // Verde
@@ -51,6 +70,7 @@ export class DashboardComponent implements OnInit {
   private usuarioIngestaService = inject(UsuarioIngestaService);
   private usuarioObjService = inject(UsuarioObjetivoServices);
   private objetivoService = inject(ObjetivoServices);
+  private comerService = inject(ComerService);
 
   ngOnInit(): void {
     this.cargarDatosCompletos();
@@ -106,6 +126,9 @@ export class DashboardComponent implements OnInit {
       },
       error: (err: any) => console.error('Error cargando objetivos usuario', err)
     });
+
+    // Cargar progreso nutricional del día
+    this.cargarProgresoDelDia(userId);
   }
 
   private calcularDerivados(): void {
@@ -149,5 +172,92 @@ export class DashboardComponent implements OnInit {
     try {
       return JSON.parse(atob(token.split('.')[1]))?.userId || null;
     } catch { return null; }
+  }
+
+  /**
+   * Carga el resumen y progreso nutricional del día actual
+   */
+  private cargarProgresoDelDia(userId: number): void {
+    this.cargandoProgreso = true;
+    this.errorProgreso = '';
+
+    this.comerService.obtenerResumenDeHoy(userId).subscribe({
+      next: (resumen: ResumenDiario) => {
+        this.resumenDiario = resumen;
+        this.progresoNutricional = resumen.progreso;
+        this.calcularMacrosConsumidos();
+        this.cargandoProgreso = false;
+      },
+      error: (err: any) => {
+        console.error('Error cargando progreso del día:', err);
+        this.errorProgreso = 'No se pudo cargar el progreso del día. Asegúrate de tener configurada tu ingesta diaria.';
+        this.cargandoProgreso = false;
+      }
+    });
+  }
+
+  /**
+   * Calcula los macros consumidos del día para visualización
+   */
+  private calcularMacrosConsumidos(): void {
+    if (!this.progresoNutricional) return;
+
+    const pro = this.progresoNutricional.consumidoProteina || 0;
+    const carb = this.progresoNutricional.consumidoCarbohidrato || 0;
+    const fat = this.progresoNutricional.consumidoGrasa || 0;
+
+    const totalGrams = (pro + carb + fat) || 1;
+
+    const pPro = (pro / totalGrams) * 100;
+    const pCarb = (carb / totalGrams) * 100;
+    const pFat = (fat / totalGrams) * 100;
+
+    this.macrosConsumidos = [
+      { label: 'Proteína', value: pro, percent: pPro, color: this.COLORS.pro },
+      { label: 'Carbohidratos', value: carb, percent: pCarb, color: this.COLORS.carb },
+      { label: 'Grasas', value: fat, percent: pFat, color: this.COLORS.fat }
+    ];
+
+    this.macrosConsumidosGradient = `conic-gradient(
+      ${this.COLORS.pro} 0% ${pPro}%,
+      ${this.COLORS.carb} ${pPro}% ${pPro + pCarb}%,
+      ${this.COLORS.fat} ${pPro + pCarb}% 100%
+    )`;
+  }
+
+  /**
+   * Obtiene el color de estado según el progreso
+   */
+  getEstadoColor(): string {
+    if (!this.progresoNutricional) return '#999';
+
+    switch (this.progresoNutricional.estado) {
+      case 'EN_META':
+        return '#4caf50'; // Verde
+      case 'DEFICIT':
+        return '#ff9800'; // Naranja
+      case 'EXCESO':
+        return '#f44336'; // Rojo
+      default:
+        return '#999';
+    }
+  }
+
+  /**
+   * Obtiene el ícono según el estado
+   */
+  getEstadoIcono(): string {
+    if (!this.progresoNutricional) return 'help';
+
+    switch (this.progresoNutricional.estado) {
+      case 'EN_META':
+        return 'check_circle';
+      case 'DEFICIT':
+        return 'trending_down';
+      case 'EXCESO':
+        return 'trending_up';
+      default:
+        return 'help';
+    }
   }
 }

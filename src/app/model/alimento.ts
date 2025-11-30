@@ -1,12 +1,13 @@
-import { Categoria } from './categoria';
-
-export class Alimento {
-  id: number = 0;
-  nombre: string = '';
-  proteina: number = 0;
-  carbohidrato: number = 0;
-  grasa: number = 0;
-  calorias: number = 0;
-  fibra: number = 0;
-  categoria: Categoria = new Categoria();
+export interface Alimento {
+  id?: number;
+  nombre: string;
+  proteina: number;
+  carbohidrato: number;
+  grasa: number;
+  fibra: number;
+  calorias: number;
+  categoriaId?: number;
+  categoriaNombre?: string;
+  categoriaInformacion?: string;
 }
+

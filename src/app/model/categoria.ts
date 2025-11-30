@@ -1,6 +1,6 @@
-export class Categoria {
-  idCategoria: number = 0;
-  nombre: string = '';
-  informacion: string = '';
+export interface Categoria {
+  id?: number;
+  nombre: string;
+  informacion?: string;
 }
 
