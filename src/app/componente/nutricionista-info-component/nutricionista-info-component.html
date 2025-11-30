@@ -16,28 +16,24 @@
         <mat-icon class="verified-icon">check_circle</mat-icon>
       </h1>
 
-      <div class="nutri-specialty">
-        Nutricionista
+      <!-- Nutricionista + experiencia -->
+      <div class="nutri-specialty-line">
+        <span class="nutri-specialty">Nutricionista</span>
+        <span class="exp-pill">{{ n.experiencia_anos }} años de experiencia</span>
       </div>
 
-      <div class="nutri-tags">
-        <span class="tag">
-          {{ n.experiencia_anos }} años de experiencia
-        </span>
-        <span class="tag">
-          Licencia: {{ n.licensia_profesional }}
-        </span>
-      </div>
-
+      <!-- ABOUT -->
       <div class="nutri-about">
         <div class="about-title">
-          About <mat-icon>info</mat-icon>
+          About
+          <mat-icon class="about-icon">info</mat-icon>
         </div>
         <p>
           {{ n.biografia }}
         </p>
       </div>
 
+      <!-- Pricing -->
       <div class="nutri-pricing">
         <span>Tarifa consulta: <strong>S/ {{ n.tarifa_consulta }}</strong></span>
         <span>Tiempo sesión: <strong>{{ n.duracion_consulta_minutos }} minutos</strong></span>
@@ -49,44 +45,53 @@
   <div class="nutri-schedule-section">
     <h3>Agendar cita:</h3>
 
-    <!-- Días -->
-    <div class="schedule-days">
-      <button
-        *ngFor="let d of diasAgenda"
-        class="day-chip"
-        [class.day-chip-selected]="d.seleccionado"
-        (click)="seleccionarDia(d)"
-      >
-        <span class="day-label">{{ d.etiquetaDia }}</span>
-        <span class="day-number">{{ d.numeroDia }}</span>
-      </button>
-    </div>
+    <div class="schedule-layout">
 
-    <!-- Horas -->
-    <div class="schedule-hours">
-      <button
-        *ngFor="let h of horasAgenda"
-        class="hour-chip"
-        [class.hour-chip-selected]="h.seleccionado"
-        (click)="seleccionarHora(h)"
-      >
-        {{ h.etiqueta }}
-      </button>
-    </div>
+      <!-- Izquierda: días + horas -->
+      <div class="schedule-left">
+        <!-- Días -->
+        <div class="schedule-days">
+          <button
+            *ngFor="let d of diasAgenda"
+            class="day-chip"
+            [class.day-chip-selected]="d.seleccionado"
+            (click)="seleccionarDia(d)"
+          >
+            <span class="day-label">{{ d.etiquetaDia }}</span>
+            <span class="day-number">{{ d.numeroDia }}</span>
+          </button>
+        </div>
 
-    <!-- Botón agendar -->
-    <div class="schedule-button">
-      <button
-        mat-raised-button
-        color="primary"
-        class="btn-agendar"
-        (click)="agendar()"
-        [disabled]="isSlotTaken"
-        [class.opacado]="isSlotTaken"
-      >
-        Agendar
-      </button>
-      <div *ngIf="isSlotTaken" class="slot-taken-msg">{{ slotTakenMessage }}</div>
+        <!-- Horas -->
+        <div class="schedule-hours">
+          <button
+            *ngFor="let h of horasAgenda"
+            class="hour-chip"
+            [class.hour-chip-selected]="h.seleccionado"
+            (click)="seleccionarHora(h)"
+          >
+            {{ h.etiqueta }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Derecha: botón agendar -->
+      <div class="schedule-right">
+        <div class="schedule-button">
+          <button
+            mat-raised-button
+            color="primary"
+            class="btn-agendar"
+            (click)="agendar()"
+            [disabled]="isSlotTaken"
+            [class.opacado]="isSlotTaken"
+          >
+            Agendar
+          </button>
+          <div *ngIf="isSlotTaken" class="slot-taken-msg">{{ slotTakenMessage }}</div>
+        </div>
+      </div>
+
     </div>
   </div>
 

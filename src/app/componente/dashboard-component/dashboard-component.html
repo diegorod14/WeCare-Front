@@ -2,6 +2,7 @@
   <mat-card class="dashboard-card">
     <div class="dashboard-content">
 
+      <!-- PANEL IZQUIERDO -->
       <div class="panel-left">
         <div class="welcome-section">
           <h1>Hola, {{ nombreUsuario }}</h1>
@@ -10,26 +11,47 @@
             <p class="motivation-text">{{ pesoMensaje }}</p>
           </div>
 
-          <div class="weight-cards-container">
-            <div class="weight-box current">
-              <span class="w-label">PESO ACTUAL</span>
-              <span class="w-value">{{ pesoActual | number:'1.0-1' }} <small>kg</small></span>
+          <!-- MÉTRICAS CENTRADAS: PESO ACTUAL / PESO IDEAL / IMC -->
+          <div class="metrics-row">
+            <!-- Peso Actual -->
+            <div class="weight-box current metric-card">
+              <div class="metric-header">
+                <mat-icon>monitor_weight</mat-icon>
+                <span class="w-label">PESO ACTUAL</span>
+              </div>
+              <span class="w-value">
+                {{ pesoActual | number:'1.0-1' }} <small>kg</small>
+              </span>
             </div>
-            <div class="weight-box target">
-              <span class="w-label">PESO IDEAL</span>
-              <span class="w-value">{{ pesoIdeal | number:'1.0-1' }} <small>kg</small></span>
+
+            <!-- Peso Ideal -->
+            <div class="weight-box target metric-card">
+              <div class="metric-header">
+                <mat-icon>flag</mat-icon>
+                <span class="w-label">PESO IDEAL</span>
+              </div>
+              <span class="w-value">
+                {{ pesoIdeal | number:'1.0-1' }} <small>kg</small>
+              </span>
+            </div>
+
+            <!-- IMC -->
+            <div class="imc-section metric-card">
+              <div class="metric-header">
+                <mat-icon>favorite</mat-icon>
+                <span class="imc-label">IMC</span>
+              </div>
+              <div class="imc-number">
+                {{ imc | number:'1.2-2' }}
+              </div>
             </div>
           </div>
-        </div>
-
-        <div class="imc-section">
-          <span class="imc-label">Tu IMC:</span>
-          <div class="imc-number">{{ imc | number:'1.2-2' }}</div>
         </div>
       </div>
 
       <div class="vertical-separator"></div>
 
+      <!-- PANEL DERECHO -->
       <div class="panel-right">
 
         <div class="calories-header">
@@ -53,8 +75,11 @@
               </div>
             </div>
 
+            <!-- OBJETIVO sin barra morada -->
             <div class="objective-info">
-              <span class="obj-label">Objetivo:</span>
+              <div class="objective-label-wrapper">
+                <span class="obj-label">Objetivo</span>
+              </div>
               <span class="obj-val">{{ objetivo.nombre || 'Cargando...' }}</span>
             </div>
           </div>
@@ -71,7 +96,7 @@
     </div>
   </mat-card>
 
-  <!-- Nueva sección: Progreso Nutricional del Día -->
+  <!-- PROGRESO NUTRICIONAL DEL DÍA -->
   <mat-card class="progreso-card">
     <h2>Progreso Nutricional de Hoy</h2>
 
@@ -90,32 +115,32 @@
     <!-- Contenido del Progreso -->
     <div *ngIf="progresoNutricional && !cargandoProgreso" class="progreso-content">
 
-      <!-- Estado General -->
-      <div class="estado-general" [style.border-color]="getEstadoColor()">
-        <mat-icon [style.color]="getEstadoColor()">{{ getEstadoIcono() }}</mat-icon>
-        <div class="estado-info">
-          <h3>{{ progresoNutricional.estado === 'EN_META' ? '¡En Meta!' : progresoNutricional.estado === 'DEFICIT' ? 'En Déficit' : 'En Exceso' }}</h3>
-          <p>{{ progresoNutricional.mensaje }}</p>
-        </div>
-      </div>
-
-      <!-- Resumen de Calorías -->
+      <!-- Resumen de Calorías (PARTE MORADA) -->
       <div class="calorias-resumen">
-        <div class="calorias-item objetivo">
-          <span class="label">Objetivo</span>
-          <span class="valor">{{ progresoNutricional.objetivoCalorias | number:'1.0-0' }}</span>
+        <!-- RESTANTE / EXCEDIDO -->
+        <div class="calorias-item restante" [class.exceso]="progresoNutricional.restanteCalorias < 0">
+          <span class="label">{{ progresoNutricional.restanteCalorias >= 0 ? 'Restante' : 'Excedido' }}</span>
+          <span class="valor">
+            {{ Math.abs(progresoNutricional.restanteCalorias) | number:'1.0-0' }}
+          </span>
           <span class="unidad">kcal</span>
         </div>
+
         <mat-icon>arrow_forward</mat-icon>
+
+        <!-- CONSUMIDO -->
         <div class="calorias-item consumido">
           <span class="label">Consumido</span>
           <span class="valor">{{ progresoNutricional.consumidoCalorias | number:'1.0-0' }}</span>
           <span class="unidad">kcal</span>
         </div>
+
         <mat-icon>arrow_forward</mat-icon>
-        <div class="calorias-item restante" [class.exceso]="progresoNutricional.restanteCalorias < 0">
-          <span class="label">{{ progresoNutricional.restanteCalorias >= 0 ? 'Restante' : 'Excedido' }}</span>
-          <span class="valor">{{ Math.abs(progresoNutricional.restanteCalorias) | number:'1.0-0' }}</span>
+
+        <!-- OBJETIVO -->
+        <div class="calorias-item objetivo">
+          <span class="label">Objetivo</span>
+          <span class="valor">{{ progresoNutricional.objetivoCalorias | number:'1.0-0' }}</span>
           <span class="unidad">kcal</span>
         </div>
       </div>
@@ -177,56 +202,69 @@
         </div>
       </div>
 
-      <!-- Gráfico de Macros Consumidos -->
-      <div class="macros-consumidos-section" *ngIf="macrosConsumidos.length > 0">
-        <h3>Distribución de Macros Consumidos</h3>
-        <div class="macros-consumidos-container">
-          <div class="macros-consumidos-list">
-            <div class="macro-consumido-item" *ngFor="let m of macrosConsumidos">
-              <div class="macro-consumido-indicator" [style.background-color]="m.color"></div>
-              <div class="macro-consumido-details">
-                <span class="macro-consumido-name">{{ m.label }}</span>
-                <span class="macro-consumido-val">
-                  {{ m.value | number:'1.0-1' }}g
-                  <small class="pct">({{ m.percent | number:'1.0-0' }}%)</small>
-                </span>
+      <!-- FILA: DISTRIBUCIÓN MACROS CONSUMIDOS + ALIMENTOS CONSUMIDOS -->
+      <div
+        class="fila-macros-alimentos"
+        *ngIf="resumenDiario && resumenDiario.cantidadComidas > 0"
+      >
+
+        <!-- Gráfico de Macros Consumidos -->
+        <div
+          class="macros-consumidos-section"
+          *ngIf="macrosConsumidos.length > 0"
+        >
+          <h3>Distribución de Macros Consumidos</h3>
+          <div class="macros-consumidos-container">
+            <div class="macros-consumidos-list">
+              <div class="macro-consumido-item" *ngFor="let m of macrosConsumidos">
+                <div class="macro-consumido-indicator" [style.background-color]="m.color"></div>
+                <div class="macro-consumido-details">
+                  <span class="macro-consumido-name">{{ m.label }}</span>
+                  <span class="macro-consumido-val">
+                    {{ m.value | number:'1.0-1' }}g
+                    <small class="pct">({{ m.percent | number:'1.0-0' }}%)</small>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="chart-wrapper-small">
+              <div class="donut-chart-small" [style.background]="macrosConsumidosGradient">
+                <div class="center-white-small"></div>
               </div>
             </div>
           </div>
-
-          <div class="chart-wrapper-small">
-            <div class="donut-chart-small" [style.background]="macrosConsumidosGradient">
-              <div class="center-white-small"></div>
-            </div>
-          </div>
         </div>
-      </div>
 
-      <!-- Alimentos Consumidos Hoy -->
-      <div class="alimentos-consumidos-section" *ngIf="resumenDiario && resumenDiario.cantidadComidas > 0">
-        <h3>Alimentos Consumidos Hoy ({{ resumenDiario.cantidadComidas }})</h3>
-        <div class="alimentos-lista">
-          <div class="alimento-consumido-card" *ngFor="let consumo of resumenDiario.alimentosConsumidos">
-            <div class="alimento-consumido-header">
-              <mat-icon>restaurant</mat-icon>
-              <strong>{{ consumo.alimentoNombre }}</strong>
-              <span class="hora">{{ consumo.horaConsumo }}</span>
-            </div>
-            <div class="alimento-consumido-detalles">
-              <span>{{ consumo.cantidad }} {{ consumo.unidad }}</span>
-              <span class="separador">•</span>
-              <span class="calorias">{{ consumo.caloriasCalculadas | number:'1.0-0' }} kcal</span>
-            </div>
-            <div class="alimento-consumido-nota" *ngIf="consumo.nota">
-              <mat-icon>notes</mat-icon>
-              <em>{{ consumo.nota }}</em>
+        <!-- Alimentos Consumidos Hoy -->
+        <div class="alimentos-consumidos-section">
+          <h3>Alimentos Consumidos Hoy ({{ resumenDiario.cantidadComidas }})</h3>
+          <div class="alimentos-lista">
+            <div class="alimento-consumido-card" *ngFor="let consumo of resumenDiario.alimentosConsumidos">
+              <div class="alimento-consumido-header">
+                <mat-icon>restaurant</mat-icon>
+                <strong>{{ consumo.alimentoNombre }}</strong>
+                <span class="hora">{{ consumo.horaConsumo }}</span>
+              </div>
+              <div class="alimento-consumido-detalles">
+                <span>{{ consumo.cantidad }} {{ consumo.unidad }}</span>
+                <span class="separador">•</span>
+                <span class="calorias">{{ consumo.caloriasCalculadas | number:'1.0-0' }} kcal</span>
+              </div>
+              <div class="alimento-consumido-nota" *ngIf="consumo.nota">
+                <mat-icon>notes</mat-icon>
+                <em>{{ consumo.nota }}</em>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Mensaje sin consumos -->
-      <div class="sin-consumos" *ngIf="!resumenDiario || resumenDiario.cantidadComidas === 0">
+      <div
+        class="sin-consumos"
+        *ngIf="!resumenDiario || resumenDiario.cantidadComidas === 0"
+      >
         <mat-icon>info</mat-icon>
         <p>Aún no has registrado ningún alimento hoy</p>
         <button mat-raised-button color="primary" routerLink="/alimentos">

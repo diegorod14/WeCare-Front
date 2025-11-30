@@ -1,10 +1,11 @@
+/* ======= CONTENEDOR GENERAL ======= */
 .nutri-info-wrapper {
   max-width: 1200px;
   margin: 0 auto;
   padding: 32px 16px 60px;
 }
 
-/* Layout principal */
+/* ======= LAYOUT PRINCIPAL ======= */
 .nutri-info-main {
   display: flex;
   gap: 40px;
@@ -12,32 +13,31 @@
   margin-bottom: 40px;
 }
 
-/* Foto */
+/* ======= FOTO ======= */
 .nutri-info-photo {
   flex: 0 0 280px;
 }
 
 .photo-bg {
-  background: #3cd853;            /* verde del mockup */
-  border-radius: 18px;
+  background: #4caf50;
+  border-radius: 14px;
   width: 100%;
   height: 320px;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   overflow: hidden;
-  padding-bottom: 0;
 }
 
 .photo-bg img {
   height: 100%;
-  max-width: 90%;
+  max-width: 100%;
   object-fit: contain;
-  transform: translateY(8px);
+  transform: none;
 }
 
-/* Detalles */
+/* ======= DETALLES - INFORMACIÓN ======= */
+
 .nutri-info-details {
   flex: 1;
 }
@@ -45,7 +45,7 @@
 .nutri-name {
   font-size: 26px;
   font-weight: 600;
-  margin: 0 0 4px;
+  margin: 0 0 10px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -56,40 +56,46 @@
   color: #1e90ff;
 }
 
-.nutri-specialty {
-  color: #555;
+/* Nutricionista + experiencia */
+.nutri-specialty-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin-bottom: 8px;
 }
 
-.nutri-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 16px;
+.nutri-specialty {
+  color: #444;
+  font-size: 16px;
+  font-weight: 500;
 }
 
-.tag {
-  border-radius: 999px;
-  border: 1px solid #ddd;
-  padding: 4px 10px;
-  font-size: 12px;
-  color: #555;
+.exp-pill {
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-size: 11px;
+  color: #777;
 }
+
+/* ======= ABOUT ======= */
 
 .nutri-about .about-title {
   font-weight: 600;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  color: #333;
 }
 
-.nutri-about p {
-  margin: 0;
-  color: #555;
-  line-height: 1.5;
+.about-icon {
+  font-size: 18px;
+  color: #777;
 }
 
+/* ======= PRICING ======= */
 .nutri-pricing {
   margin-top: 16px;
   display: flex;
@@ -98,67 +104,102 @@
   font-size: 14px;
 }
 
-/* Agenda */
+/* ======= AGENDAR CITA ======= */
+
 .nutri-schedule-section h3 {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #444;
 }
 
-.schedule-days {
+/* Layout días + horas + botón */
+.schedule-layout {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
+  align-items: flex-start;  /* que todo parta desde arriba */
+  gap: 16px;                /* menos separación entre izquierda y botón */
 }
 
-.day-chip {
-  border-radius: 999px;
-  border: 1px solid #ddd;
-  background: #fff;
-  padding: 10px 16px;
-  cursor: pointer;
-  outline: none;
-  min-width: 70px;
+/* Columna izquierda */
+.schedule-left {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  font-size: 12px;
+  /* sin flex:1 para que no se estire de más */
 }
 
-.day-label {
-  font-weight: 500;
-  margin-bottom: 2px;
-}
-
-.day-number {
-  font-size: 14px;
-}
-
-.day-chip-selected {
-  background: #3cd853;
-  border-color: #3cd853;
-  color: #fff;
-}
-
-.schedule-hours {
+/* ---- DÍAS ---- */
+.schedule-days {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
   margin-bottom: 24px;
 }
 
+.day-chip {
+  width: 72px;
+  height: 90px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: background 0.15s ease;
+  color: #666;
+}
+
+.day-label {
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.day-number {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.day-chip-selected {
+  background: #4caf50;
+  border-color: #4caf50;
+  color: #fff;
+}
+
+/* ---- HORAS (2 filas, un poco más pequeñas) ---- */
+.schedule-hours {
+  display: inline-grid;
+  grid-template-columns: repeat(4, auto);
+  column-gap: 15px;
+  row-gap: 10px;
+  margin-bottom: 0;
+}
+
 .hour-chip {
-  border-radius: 999px;
+  padding: 8px 40px;
+  font-size: 12px;
   border: 1px solid #ddd;
   background: #fff;
-  padding: 6px 14px;
-  font-size: 12px;
+  border-radius: 16px;
   cursor: pointer;
+  min-width: 100px;
+  text-align: center;
+  color: #555;
+  transition: background 0.15s ease;
 }
 
 .hour-chip-selected {
-  background: #3cd853;
-  border-color: #3cd853;
+  background: #4caf50;
+  border-color: #4caf50;
   color: #fff;
+}
+
+/* ---- COLUMNA DERECHA: BOTÓN ---- */
+.schedule-right {
+  display: flex;
+  align-items: flex-start;  /* alineado a la parte superior de las horas */
+  padding-top: 72px;/* lo baja un poquito para que quede a la altura visual de las filas */
+  padding-left: 30px;
 }
 
 .schedule-button {
@@ -166,9 +207,13 @@
 }
 
 .btn-agendar {
-  padding: 10px 60px;
-  border-radius: 999px;
+  padding: 12px 60px;
+  border-radius: 20px;
+  background-color: #4caf50 !important;
+  color: #ffffff !important;
   font-size: 16px;
+  font-weight: 500;
+  text-transform: none;
 }
 
 .opacado {
@@ -180,4 +225,22 @@
   margin-top: 8px;
   color: #d32f2f;
   font-size: 0.9rem;
+}
+
+/* Opcional: responsive básico */
+@media (max-width: 900px) {
+  .nutri-info-main {
+    flex-direction: column;
+  }
+
+  .schedule-layout {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .schedule-right {
+    align-self: center;
+    padding-top: 0;
+  }
 }

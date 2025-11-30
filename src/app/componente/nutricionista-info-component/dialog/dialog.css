@@ -1,18 +1,22 @@
 .dialog-title {
   font-size: 20px;
   font-weight: 600;
-  margin: 0;
+  margin: 10px;
   padding-bottom: 4px;
+  text-align: center;
 }
 
 .dialog-content {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 26px;
 }
 
+/* Contenido interno del mat-dialog: sin scroll y sin max-height */
 :host ::ng-deep .mat-mdc-dialog-content {
-  padding: 8px 24px 20px !important;
+  padding: 8px 24px 24px !important;
+  max-height: none !important;
+  overflow-y: visible !important;
 }
 
 .full-width {
@@ -28,6 +32,7 @@
   background: #f1f6ff;
   border: 1px solid #d7e3ff;
   color: #1a3e74;
+  min-height: 80px;
 }
 
 .estado-label {
@@ -42,10 +47,17 @@
   font-weight: 600;
 }
 
+/* Botones centrados y más cerca */
 .dialog-actions {
-  padding: 0 16px 12px;
+  padding: 16px 24px 24px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
 }
 
+/* Superficie del diálogo sin max-height extra */
 :host ::ng-deep .mat-mdc-dialog-container .mdc-dialog__surface {
   border-radius: 20px;
+  max-height: none !important;
+  overflow: visible !important;
 }

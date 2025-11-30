@@ -39,18 +39,31 @@
   margin: 0;
 }
 
-.weight-cards-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+/* MÉTRICAS: PESO ACTUAL / PESO IDEAL / IMC */
+.metrics-row {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: wrap;
 }
 
-.weight-box {
-  padding: 20px;
-  border-radius: 12px;
+.metric-card {
+  text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  min-width: 210px;          /* más grandes */
+}
+
+/* Tarjetas de peso */
+.weight-box {
+  padding: 24px;             /* más padding */
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
 }
 
 .weight-box.current {
@@ -63,8 +76,35 @@
   border: 2px solid #9c27b0;
 }
 
+/* IMC como tarjeta */
+.imc-section {
+  padding: 24px;
+  background-color: #fff3e0;
+  border-radius: 14px;
+  border: 2px solid #ff9800;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.metric-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.metric-header mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  color: #555;
+}
+
 .w-label {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: #666;
   text-transform: uppercase;
@@ -72,26 +112,15 @@
 }
 
 .w-value {
-  font-size: 28px;
+  font-size: 32px;       /* más grande */
   font-weight: 700;
   color: #333;
 }
 
 .w-value small {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 400;
   color: #999;
-}
-
-.imc-section {
-  padding: 24px;
-  background-color: #fff3e0;
-  border-radius: 12px;
-  border: 2px solid #ff9800;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
 }
 
 .imc-label {
@@ -102,7 +131,7 @@
 }
 
 .imc-number {
-  font-size: 48px;
+  font-size: 34px;       /* un poco más grande */
   font-weight: 700;
   color: #ff9800;
 }
@@ -134,10 +163,10 @@
 }
 
 .cal-value {
-  font-size: 48px;
+  font-size: 35px;
   font-weight: 700;
   color: #333;
-  margin-top: 8px;
+  margin-top: 18px;
 }
 
 .cal-value span {
@@ -196,21 +225,32 @@
   color: #999;
 }
 
+/* OBJETIVO sin barra morada */
 .objective-info {
   margin-top: 16px;
-  padding: 16px;
-  background-color: #f5f5f5;
-  border-radius: 8px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background-color: #fafafa;
+  border: 1px solid rgba(63, 81, 181, 0.35);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+}
+
+.objective-label-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .obj-label {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   color: #666;
   text-transform: uppercase;
+  letter-spacing: 0.8px;
 }
 
 .obj-val {
@@ -219,6 +259,7 @@
   color: #3f51b5;
 }
 
+/* Chart macros objetivo */
 .chart-wrapper {
   display: flex;
   justify-content: center;
@@ -291,36 +332,7 @@
   gap: 24px;
 }
 
-/* Estado General */
-.estado-general {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 24px;
-  border-radius: 12px;
-  border: 3px solid;
-  background-color: #f9f9f9;
-}
-
-.estado-general mat-icon {
-  font-size: 48px;
-  width: 48px;
-  height: 48px;
-}
-
-.estado-info h3 {
-  margin: 0 0 8px 0;
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.estado-info p {
-  margin: 0;
-  color: #666;
-  font-size: 14px;
-}
-
-/* Resumen de Calorías */
+/* Resumen de Calorías (parte morada) */
 .calorias-resumen {
   display: flex;
   align-items: center;
@@ -433,11 +445,19 @@
   background: linear-gradient(90deg, #ef5350, #d32f2f);
 }
 
-/* Macros Consumidos */
+/* Macros Consumidos + Alimentos */
+.fila-macros-alimentos {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
 .macros-consumidos-section {
-  padding: 24px;
+  padding: 20px;
   background-color: #f9f9f9;
   border-radius: 12px;
+  flex: 0 0 38%;
+  max-width: 420px;
 }
 
 .macros-consumidos-section h3 {
@@ -449,7 +469,7 @@
 
 .macros-consumidos-container {
   display: flex;
-  gap: 32px;
+  gap: 16px;
   align-items: center;
 }
 
@@ -457,13 +477,13 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .macro-consumido-item {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .macro-consumido-indicator {
@@ -491,6 +511,12 @@
   color: #333;
 }
 
+.macro-consumido-val .pct {
+  font-size: 12px;
+  font-weight: 400;
+  color: #999;
+}
+
 .chart-wrapper-small {
   display: flex;
   justify-content: center;
@@ -516,9 +542,10 @@
 
 /* Alimentos Consumidos */
 .alimentos-consumidos-section {
-  padding: 24px;
+  padding: 20px;
   background-color: #f9f9f9;
   border-radius: 12px;
+  flex: 1;
 }
 
 .alimentos-consumidos-section h3 {
@@ -636,14 +663,26 @@
     height: 2px;
   }
 
-  .macros-container,
-  .calorias-resumen,
-  .macros-consumidos-container {
+  .macros-container {
     flex-direction: column;
   }
 
-  .weight-cards-container {
-    grid-template-columns: 1fr;
+  .metrics-row {
+    flex-direction: column;
+  }
+
+  .fila-macros-alimentos {
+    flex-direction: column;
+  }
+
+  .macros-consumidos-section,
+  .alimentos-consumidos-section {
+    flex: 1 1 auto;
+    max-width: 100%;
+  }
+
+  .calorias-resumen {
+    flex-direction: column;
   }
 }
 
