@@ -9,16 +9,17 @@
 
       <div class="header">
         <h1>Regístrate aquí</h1>
-        <p>Comienza tu vida saludable hoy mismo</p>
       </div>
 
       <form (ngSubmit)="onRegister()" #registerForm="ngForm">
 
+        <!-- Usuario -->
         <div class="input-group">
           <label>Usuario *</label>
           <input type="text" name="username" [(ngModel)]="user.username" required placeholder="Nombre de usuario">
         </div>
 
+        <!-- Nombres y Apellidos -->
         <div class="row-split">
           <div class="input-group input-half">
             <label>Nombres *</label>
@@ -30,6 +31,7 @@
           </div>
         </div>
 
+        <!-- Género -->
         <div class="input-group">
           <label>Género *</label>
           <select name="genero" [(ngModel)]="user.genero" required>
@@ -39,30 +41,53 @@
           </select>
         </div>
 
+        <!-- Correo -->
         <div class="input-group">
           <label>Correo *</label>
           <input type="email" name="correo" [(ngModel)]="user.correo" required placeholder="correo@ejemplo.com">
         </div>
 
+        <!-- Celular -->
         <div class="input-group">
           <label>Celular *</label>
           <input type="text" name="celular" [(ngModel)]="user.celular" required placeholder="999 999 999">
         </div>
 
-        <div class="input-group">
+        <!-- ===================================================== -->
+        <!--      CONTRASEÑA CON ÍCONO MATERIAL (OJO/OJO TACHADO)  -->
+        <!-- ===================================================== -->
+        <div class="input-group password-wrapper">
           <label>Contraseña *</label>
-          <input type="password" name="password" [(ngModel)]="user.password" required placeholder="******">
-        </div>
 
+          <div class="password-container">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              name="password"
+              [(ngModel)]="user.password"
+              required
+              placeholder="******">
+
+            <span class="toggle-password" (click)="togglePassword()">
+              <span class="material-icons">
+                {{ showPassword ? 'visibility' : 'visibility_off' }}
+              </span>
+            </span>
+          </div>
+        </div>
+        <!-- ===================================================== -->
+
+        <!-- Botón -->
         <button type="submit" class="btn-submit" [disabled]="loading">
           {{ loading ? 'Registrando...' : 'Registrarse' }}
         </button>
 
+        <!-- Footer -->
         <div class="footer">
           ¿Ya tienes cuenta? <a (click)="goToLogin()">Inicia sesión</a>
         </div>
 
       </form>
+
     </div>
   </div>
 </div>

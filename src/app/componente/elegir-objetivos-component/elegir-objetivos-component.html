@@ -1,5 +1,8 @@
 <div class="objetivos-page">
+  <div class="background-image"></div>
+
   <div class="objetivos-wrapper">
+
     <div class="objetivos-header">
       <h1 class="titulo">Objetivos</h1>
       <p class="subtitulo">¿Qué meta te propones seguir?</p>
@@ -7,21 +10,21 @@
 
     <div class="objetivos-grid">
       <mat-grid-list cols="3" rowHeight="2:1" gutterSize="24">
-        <mat-grid-tile *ngFor="let objetivo of listaObjetivos">
+        <mat-grid-tile *ngFor="let obj of listaObjetivos">
           <button
             mat-raised-button
             class="objetivo-card"
-            [ngClass]="{
-              selected: objetivo.id === seleccionado?.id
-            }"
-            (click)="seleccionarObjetivo(objetivo)"
+            [ngClass]="{ selected: obj.id === seleccionado?.id }"
+            (click)="seleccionarObjetivo(obj)"
           >
-            <mat-icon class="objetivo-icon">
-              {{ getIconForObjetivo(objetivo) }}
-            </mat-icon>
+            <div class="obj-icon">
+              <mat-icon>
+                {{ obj.id === 1 ? 'trending_down' : obj.id === 2 ? 'trending_up' : 'fitness_center' }}
+              </mat-icon>
+            </div>
 
-            <div class="objetivo-text">
-              <span class="objetivo-name">{{ objetivo.nombre }}</span>
+            <div class="objetivo-name">
+              {{ obj.nombre }}
             </div>
           </button>
         </mat-grid-tile>
@@ -30,7 +33,6 @@
 
     <button
       mat-raised-button
-      color="accent"
       class="btn-guardar"
       [disabled]="!seleccionado || isSaving"
       (click)="guardarObjetivo()"
@@ -40,5 +42,6 @@
 
     <p *ngIf="mensajeExito" class="mensaje-exito">{{ mensajeExito }}</p>
     <p *ngIf="mensajeError" class="mensaje-error">{{ mensajeError }}</p>
+
   </div>
 </div>

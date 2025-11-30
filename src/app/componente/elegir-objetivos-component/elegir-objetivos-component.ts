@@ -1,16 +1,15 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {Router} from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
-import {MatGridListModule} from '@angular/material/grid-list';
-import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
-import {MatDialog, MatDialogModule, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
-import {ObjetivoServices} from '../../services/objetivo-services';
-import {UsuarioObjetivoServices} from '../../services/usuario-objetivo-services';
-import {UsuarioIngestaService} from '../../services/usuario-ingesta-service';
-import {Objetivo} from '../../model/objetivo';
+import { ObjetivoServices } from '../../services/objetivo-services';
+import { UsuarioObjetivoServices } from '../../services/usuario-objetivo-services';
+import { UsuarioIngestaService } from '../../services/usuario-ingesta-service';
+import { Objetivo } from '../../model/objetivo';
 
 @Component({
   selector: 'app-elegir-objetivos-component',
@@ -19,16 +18,21 @@ import {Objetivo} from '../../model/objetivo';
     CommonModule,
     MatGridListModule,
     MatButtonModule,
-    MatIconModule,
-    MatDialogModule
+    MatIconModule
   ],
   templateUrl: './elegir-objetivos-component.html',
   styleUrls: ['./elegir-objetivos-component.css']
 })
 export class ElegirObjetivosComponent implements OnInit {
-  listaObjetivos: Objetivo[] = [];
+
+  // 🔹 Datos por defecto para que SIEMPRE aparezcan 3 tarjetas
+  listaObjetivos: Objetivo[] = [
+    { id: 1, nombre: 'Pérdida de peso' } as Objetivo,
+    { id: 2, nombre: 'Mantenimiento' } as Objetivo,
+    { id: 3, nombre: 'Volumen muscular' } as Objetivo
+  ];
+
   seleccionado: Objetivo | null = null;
-  descripcionSeleccionada = '';
 
   isSaving = false;
   mensajeExito = '';
@@ -38,7 +42,6 @@ export class ElegirObjetivosComponent implements OnInit {
   private usuarioObjetivoService = inject(UsuarioObjetivoServices);
   private usuarioIngestaService = inject(UsuarioIngestaService);
   private router = inject(Router);
-  private dialog = inject(MatDialog);
 
   ngOnInit() {
     this.loadObjetivos();
@@ -46,44 +49,23 @@ export class ElegirObjetivosComponent implements OnInit {
 
   private loadObjetivos() {
     this.objetivoService.findAll().subscribe({
-      next: (data) => this.listaObjetivos = data || [],
-      error: (err) => {
+      next: data => {
+        if (data && data.length > 0) {
+          this.listaObjetivos = data;
+        }
+      },
+      error: err => {
         console.error('Error al cargar objetivos', err);
-        this.mensajeError = 'No se pudieron cargar los objetivos.';
+        // No rompemos la UI, solo mostramos mensaje y dejamos los 3 por defecto
+        this.mensajeError = 'No se pudieron cargar los objetivos desde el servidor. Usando valores por defecto.';
       }
     });
   }
 
-  seleccionarObjetivo(objetivo: Objetivo) {
-    this.seleccionado = objetivo;
+  seleccionarObjetivo(obj: Objetivo) {
+    this.seleccionado = obj;
     this.mensajeError = '';
     this.mensajeExito = '';
-
-    this.objetivoService.findById(objetivo.id).subscribe({
-      next: (detail) => {
-        const descripcion = this.obtenerDescripcion(detail);
-        if (!descripcion) {
-          this.mensajeError = 'No se encontró la descripción del objetivo en el servidor.';
-          return;
-        }
-        this.descripcionSeleccionada = descripcion;
-        this.openDescripcionDialog(objetivo.nombre);
-      },
-      error: (err) => {
-        console.error('Error obteniendo descripción del objetivo:', err);
-        this.mensajeError = 'No se pudo cargar la descripción del objetivo.';
-      }
-    });
-  }
-
-  private openDescripcionDialog(nombre: string) {
-    this.dialog.open(ObjetivoDescripcionDialog, {
-      data: {
-        nombre,
-        descripcion: this.descripcionSeleccionada
-      },
-      width: '400px'
-    });
   }
 
   guardarObjetivo() {
@@ -93,7 +75,6 @@ export class ElegirObjetivosComponent implements OnInit {
     }
 
     const userId = this.extractUserIdFromToken(localStorage.getItem('token'));
-
     if (!userId) {
       this.mensajeError = 'No se pudo obtener el usuario del token. Inicia sesión nuevamente.';
       return;
@@ -110,26 +91,27 @@ export class ElegirObjetivosComponent implements OnInit {
 
     this.usuarioObjetivoService.insert(payload).subscribe({
       next: () => this.crearUsuarioIngesta(userId),
-      error: (err) => {
+      error: err => {
         this.isSaving = false;
         console.error('Error al guardar objetivo:', err);
-        this.mensajeError = 'Ocurrió un error al guardar el objetivo: ' + (err?.error?.message || err?.message || 'Error desconocido');
+        this.mensajeError = 'Ocurrió un error al guardar el objetivo.';
       }
     });
   }
 
   private crearUsuarioIngesta(userId: number) {
-    const ingestaPayload = {usuarioId: userId};
+    const ingestaPayload = { usuarioId: userId };
 
     this.usuarioIngestaService.insert(ingestaPayload as any).subscribe({
       next: () => {
         this.isSaving = false;
-        this.mensajeExito = 'Objetivo e ingesta guardados correctamente. Redirigiendo...';
+        this.mensajeExito = 'Objetivo guardado correctamente. Redirigiendo...';
         setTimeout(() => this.router.navigate(['/dashboard']), 1500);
       },
-      error: (errIngesta) => {
+      error: err => {
+        console.error('Error al crear usuario ingesta:', err);
         this.isSaving = false;
-        console.error('Error al crear usuario-ingesta:', errIngesta);
+        // Igual lo dejo pasar
         this.mensajeExito = 'Objetivo guardado. Redirigiendo...';
         setTimeout(() => this.router.navigate(['/dashboard']), 1500);
       }
@@ -140,51 +122,11 @@ export class ElegirObjetivosComponent implements OnInit {
     if (!token) return null;
     try {
       const parts = token.split('.');
-      if (parts.length !== 3) return null;
       const payload = JSON.parse(atob(parts[1]));
       return payload?.userId || null;
     } catch (e) {
-      console.error('Error decodificando token:', e);
+      console.error('Error decodificando token', e);
       return null;
     }
   }
-
-  private obtenerDescripcion(data: Partial<Objetivo> | undefined | null): string {
-    return data?.descripcion || (data as any)?.informacion || (data as any)?.descripcionObjetivo || '';
-  }
-
-  getIconForObjetivo(objetivo: Objetivo): string {
-    const nombre = objetivo.nombre?.toLowerCase() || '';
-    if (nombre.includes('sedentario') || nombre.includes('perder')) {
-      return 'event_seat';
-    } else if (nombre.includes('ligero') || nombre.includes('mantener')) {
-      return 'directions_walk';
-    } else if (nombre.includes('intenso') || nombre.includes('ganar') || nombre.includes('aumentar')) {
-      return 'fitness_center';
-    }
-    return 'flag';
-  }
-}
-
-@Component({
-  selector: 'objetivo-descripcion-dialog',
-  standalone: true,
-  imports: [CommonModule, MatDialogModule, MatButtonModule],
-  template: `
-    <h2 mat-dialog-title>{{ data.nombre }}</h2>
-    <mat-dialog-content>
-      <p>{{ data.descripcion }}</p>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close>Cerrar</button>
-    </mat-dialog-actions>
-  `,
-  styles: [`
-    mat-dialog-content {
-      padding: 20px 0;
-    }
-  `]
-})
-export class ObjetivoDescripcionDialog {
-  data = inject(MAT_DIALOG_DATA);
 }

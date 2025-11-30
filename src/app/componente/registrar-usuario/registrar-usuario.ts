@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import {CommonModule} from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UsuarioService } from '../../services/user-service';
@@ -20,6 +20,9 @@ export class RegistrarUsuario {
   errorMessage: string = '';
   successMessage: string = '';
   loading: boolean = false;
+
+  // 👁️ Nueva propiedad para controlar mostrar/ocultar contraseña
+  showPassword: boolean = false;
 
   onRegister(): void {
     if (!this.validateForm()) {
@@ -70,7 +73,9 @@ export class RegistrarUsuario {
           } else if (typeof errorMsg === 'string' && errorMsg.includes('correo ya existe')) {
             this.errorMessage = 'Este correo electrónico ya está registrado';
           } else {
-            this.errorMessage = typeof errorMsg === 'string' ? errorMsg : 'Datos inválidos. Verifica el formulario.';
+            this.errorMessage = typeof errorMsg === 'string'
+              ? errorMsg
+              : 'Datos inválidos. Verifica el formulario.';
           }
         } else if (error?.status === 409) {
           this.errorMessage = 'El usuario o correo ya existe';
@@ -86,7 +91,7 @@ export class RegistrarUsuario {
   validateForm(): boolean {
     // Validar campos vacíos
     if (!this.user.username || !this.user.correo || !this.user.nombres ||
-        !this.user.apellidos || !this.user.celular || !this.user.genero) {
+      !this.user.apellidos || !this.user.celular || !this.user.genero) {
       this.errorMessage = 'Todos los campos son obligatorios';
       return false;
     }
@@ -127,5 +132,10 @@ export class RegistrarUsuario {
 
   goToLogin(): void {
     this.router.navigate(['/login']);
+  }
+
+  // 👁️ Método para alternar visibilidad de la contraseña
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
   }
 }

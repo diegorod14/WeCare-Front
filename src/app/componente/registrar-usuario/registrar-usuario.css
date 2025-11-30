@@ -1,7 +1,7 @@
 :host {
   display: block;
   box-sizing: border-box;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Poppins', sans-serif;
   --navbar-height: 70px;
   --animation-curve: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -10,13 +10,21 @@
   box-sizing: border-box;
 }
 
+/* ====================== */
+/* CONTENEDOR PRINCIPAL */
+/* ====================== */
+
 .main-container {
   display: flex;
   width: 100%;
-  height: calc(100vh - var(--navbar-height));
+  height: calc(100.6vh - var(--navbar-height));
   overflow: hidden;
   background-color: #fff;
 }
+
+/* ====================== */
+/* SECCIÓN DE IMAGEN */
+/* ====================== */
 
 .image-section {
   width: 45%;
@@ -38,9 +46,16 @@
 
 .overlay {
   position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: linear-gradient(90deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0) 100%);
 }
+
+/* ====================== */
+/* SECCIÓN FORMULARIO */
+/* ====================== */
 
 .form-section {
   flex: 1;
@@ -62,6 +77,10 @@
   padding: 20px 0;
 }
 
+/* ====================== */
+/* CABECERA */
+/* ====================== */
+
 .header {
   text-align: center;
   margin-bottom: 2vh;
@@ -82,6 +101,10 @@
   margin-top: 0.5vh;
   font-size: clamp(0.8rem, 1.5vh, 0.95rem);
 }
+
+/* ====================== */
+/* INPUTS */
+/* ====================== */
 
 .input-group {
   margin-bottom: 1.5vh;
@@ -117,6 +140,10 @@ input:focus, select:focus {
   box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.1);
 }
 
+/* ====================== */
+/* FILAS DIVIDIDAS */
+/* ====================== */
+
 .row-split {
   display: flex;
   flex-direction: row;
@@ -126,7 +153,13 @@ input:focus, select:focus {
   animation: fadeInUp 0.6s var(--animation-curve) forwards;
 }
 
-.input-half { flex: 1; }
+.input-half {
+  flex: 1;
+}
+
+/* ====================== */
+/* BOTÓN SUBMIT */
+/* ====================== */
 
 .btn-submit {
   width: 100%;
@@ -155,6 +188,10 @@ input:focus, select:focus {
   transform: translateY(0);
 }
 
+/* ====================== */
+/* FOOTER */
+/* ====================== */
+
 .footer {
   text-align: center;
   margin-top: 1.5vh;
@@ -171,7 +208,54 @@ input:focus, select:focus {
   cursor: pointer;
   text-decoration: none;
 }
-.footer a:hover { text-decoration: underline; }
+.footer a:hover {
+  text-decoration: underline;
+}
+
+/* ====================== */
+/*   OJO PASSWORD (MATERIAL) */
+/* ====================== */
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-container input {
+  padding-right: 48px; /* espacio para el icono */
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-password .material-icons {
+  font-size: 24px;
+  line-height: 1;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.toggle-password:hover .material-icons {
+  color: #4CAF50;
+  transform: scale(1.08);
+}
+
+/* ====================== */
+/* ANIMACIONES */
+/* ====================== */
 
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(20px); }
@@ -190,9 +274,27 @@ form > div:nth-child(4) { animation-delay: 0.6s; }
 form > div:nth-child(5) { animation-delay: 0.7s; }
 form > div:nth-child(6) { animation-delay: 0.8s; }
 
+/* ====================== */
+/* RESPONSIVE */
+/* ====================== */
+
 @media (max-width: 900px) {
-  .main-container { flex-direction: column; height: auto; overflow-y: auto; }
-  .image-section { width: 100%; height: 200px; flex-shrink: 0; }
-  .form-section { padding: 30px 20px; height: auto; }
-  .row-split { flex-direction: column; gap: 15px; }
+  .main-container {
+    flex-direction: column;
+    height: auto;
+    overflow-y: auto;
+  }
+  .image-section {
+    width: 100%;
+    height: 200px;
+    flex-shrink: 0;
+  }
+  .form-section {
+    padding: 30px 20px;
+    height: auto;
+  }
+  .row-split {
+    flex-direction: column;
+    gap: 15px;
+  }
 }
