@@ -1,79 +1,83 @@
 <div class="citas-container">
 
-  <!-- 1. ENCABEZADO LIMPIO (Sin Card) -->
   <div class="header-section">
-    <h1 class="citas-title">Citas Programadas</h1>
-    <p class="citas-subtitle">
-      Revisa las citas agendadas organizadas por usuario y fecha
+    <h1 class="page-title">Citas Programadas</h1>
+    <p class="page-subtitle">
+      Gestiona la agenda organizada por pacientes y fechas
     </p>
+
+    <div class="search-wrapper">
+      <mat-form-field class="search-input-field" appearance="outline">
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput placeholder="Buscar por nombre o documento..." (keyup)="onBuscar($event)" />
+      </mat-form-field>
+    </div>
   </div>
 
-  <!-- 2. BUSCADOR CENTRADO -->
-  <div class="search-section">
-    <mat-form-field class="search-input" appearance="outline">
-      <mat-icon matPrefix>search</mat-icon>
-      <input matInput placeholder="Buscar usuario" (keyup)="onBuscar($event)" />
-    </mat-form-field>
+  <div *ngIf="isLoading" class="state-message">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Cargando agenda...</p>
   </div>
 
-  <!-- ESTADO DE CARGA -->
-  <div *ngIf="isLoading" class="loading-message">Cargando citas...</div>
+  <div *ngIf="!isLoading && filteredCitasPorUsuario.length > 0; else noData" class="accordion-list">
 
-  <!-- 3. LISTA DE ACORDEONES (Citas) -->
-  <div *ngIf="!isLoading && filteredCitasPorUsuario.length > 0; else noData" class="accordion-wrapper">
+    <mat-accordion multi="true" class="custom-accordion">
 
-    <mat-accordion multi="true">
-      <!-- Panel de Usuario -->
-      <mat-expansion-panel *ngFor="let grupo of filteredCitasPorUsuario" class="usuario-panel" hideToggle>
+      <mat-expansion-panel *ngFor="let grupo of filteredCitasPorUsuario" class="user-panel" hideToggle>
 
-        <mat-expansion-panel-header class="usuario-header">
+        <mat-expansion-panel-header class="panel-header">
           <div class="header-content">
-            <div class="user-main-info">
-              <span class="usuario-name">{{ grupo.usuario.nombres }} {{ grupo.usuario.apellidos }}</span>
-              <span class="usuario-username">{{ '@' + grupo.usuario.username }}</span>
+            <div class="mini-avatar">
+              {{ grupo.usuario.nombres.charAt(0) }}{{ grupo.usuario.apellidos.charAt(0) }}
             </div>
-            <span class="usuario-contact">
-              {{ grupo.usuario.correo }} · {{ grupo.usuario.celular }}
-            </span>
-            <mat-icon class="expand-icon">expand_more</mat-icon>
+
+            <div class="user-info">
+              <span class="name">{{ grupo.usuario.nombres }} {{ grupo.usuario.apellidos }}</span>
+              <span class="username">{{ '@' + grupo.usuario.username }}</span>
+            </div>
+
+            <div class="spacer"></div>
+
+            <div class="contact-pill">
+              <mat-icon>email</mat-icon> {{ grupo.usuario.correo }}
+            </div>
+
+            <mat-icon class="custom-toggle">expand_more</mat-icon>
           </div>
         </mat-expansion-panel-header>
 
         <div class="panel-body">
-          <!-- Bloque de Fechas -->
-          <div *ngFor="let grupoFecha of grupo.citasPorFecha" class="fecha-block">
+          <div *ngFor="let grupoFecha of grupo.citasPorFecha" class="date-group">
 
-            <h3 class="fecha-subtle-title">
-              <mat-icon>calendar_today</mat-icon>
-              <!-- Ajusta el pipe de fecha según tu configuración local -->
-              {{ grupoFecha.fecha | date:'EEEE, d \'de\' MMMM \'de\' yyyy' }}
+            <h3 class="date-header">
+              <mat-icon>event</mat-icon>
+              {{ grupoFecha.fecha | date:'EEEE, d \'de\' MMMM' }}
             </h3>
 
-            <!-- Grid de Citas Horizontal -->
-            <div class="citas-grid">
-              <div *ngFor="let cita of grupoFecha.citas" class="cita-item">
-                <div class="cita-top-border"></div>
+            <div class="cards-grid">
+              <div *ngFor="let cita of grupoFecha.citas" class="cita-card">
+                <div class="card-accent"></div>
 
-                <div class="cita-info">
+                <div class="cita-row time-row">
                   <span class="label">HORA</span>
-                  <span class="value-time">{{ cita.hora }}</span>
+                  <span class="value-large">{{ cita.hora }}</span>
                 </div>
 
-                <div class="cita-info">
+                <div class="cita-row">
                   <span class="label">ESTADO</span>
-                  <span class="estado-badge" [ngClass]="'estado-' + cita.estado.toLowerCase()">
+                  <span class="status-badge" [ngClass]="'status-' + cita.estado.toLowerCase()">
                     {{ cita.estado }}
                   </span>
                 </div>
 
-                <div class="cita-info">
+                <div class="cita-row">
                   <span class="label">TIPO</span>
-                  <span class="type-text">{{ cita.tipo_consulta }}</span>
+                  <span class="value-text">{{ cita.tipo_consulta }}</span>
                 </div>
 
-                <div class="cita-info full-width" *ngIf="cita.motivo_consulta">
+                <div class="cita-row full-width" *ngIf="cita.motivo_consulta">
                   <span class="label">MOTIVO</span>
-                  <span class="motivo-text">{{ cita.motivo_consulta }}</span>
+                  <p class="motivo-desc">{{ cita.motivo_consulta }}</p>
                 </div>
               </div>
             </div>
@@ -87,8 +91,9 @@
   </div>
 
   <ng-template #noData>
-    <div class="no-citas">
-      <p>No se encontraron citas.</p>
+    <div class="state-message empty">
+      <mat-icon>event_busy</mat-icon>
+      <p>No se encontraron citas con ese criterio.</p>
     </div>
   </ng-template>
 

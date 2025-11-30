@@ -1,28 +1,53 @@
 <div class="usuario-wrapper">
-  <h1 class="usuario-title">Usuarios registrados</h1>
-  <p class="usuario-subtitle">Busca a un usuario y revisa su información básica</p>
 
-  <mat-form-field class="usuario-search" appearance="outline">
-    <mat-icon matPrefix>search</mat-icon>
-    <input matInput placeholder="Buscar usuario" (keyup)="onBuscar($event)" />
-  </mat-form-field>
+  <div class="header-section">
+    <h1 class="usuario-title">Usuarios Registrados</h1>
+    <p class="usuario-subtitle">Gestiona el acceso y revisa la información del personal</p>
 
-  <div class="usuario-card-container" *ngIf="filteredUsuarios.length; else emptyState">
+    <div class="search-container">
+      <mat-form-field class="usuario-search" appearance="outline">
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput placeholder="Buscar por nombre, correo o usuario..." (keyup)="onBuscar($event)" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="usuario-card-container" *ngIf="filteredUsuarios.length > 0; else emptyState">
+
     <mat-card class="usuario-card" *ngFor="let u of filteredUsuarios">
-      <mat-card-content>
+      <div class="card-accent"></div>
+
+      <mat-card-content class="card-content">
+        <div class="user-avatar">
+          {{ u.nombres.charAt(0) }}{{ u.apellidos.charAt(0) }}
+        </div>
+
         <div class="usuario-name">{{ u.nombres }} {{ u.apellidos }}</div>
-        <div class="usuario-username">@{{ u.username }}</div>
-        <p class="usuario-contact">{{ u.correo }} · {{ u.celular }}</p>
+        <div class="usuario-username">{{ '@' + u.username }}</div>
+
+        <div class="divider"></div>
+
+        <div class="contact-info">
+          <div class="info-item">
+            <mat-icon>email</mat-icon>
+            <span>{{ u.correo }}</span>
+          </div>
+        </div>
       </mat-card-content>
-      <mat-card-actions>
-        <button mat-stroked-button color="primary" (click)="verDetalle(u.id)">
-          Más información
+
+      <mat-card-actions class="card-actions">
+        <button mat-stroked-button color="primary" class="btn-detalle" (click)="verDetalle(u.id)">
+          Ver Perfil Completo
         </button>
       </mat-card-actions>
     </mat-card>
+
   </div>
 
   <ng-template #emptyState>
-    <p class="usuario-empty">No se encontraron usuarios.</p>
+    <div class="usuario-empty">
+      <mat-icon>person_off</mat-icon>
+      <p>No se encontraron usuarios con ese criterio.</p>
+    </div>
   </ng-template>
 </div>

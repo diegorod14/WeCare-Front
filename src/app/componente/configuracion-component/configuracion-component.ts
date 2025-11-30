@@ -77,6 +77,15 @@ export class ConfiguracionComponent implements OnInit {
     this.userService.listId(userId).subscribe({
       next: (data: any) => {
         this.user = data;
+        // Obtener username separado (al igual que en usuario-component)
+        if (this.user && this.user.id) {
+          this.userService.findUsername(this.user.id).subscribe({
+            next: (username: string) => {
+              this.user.username = username;
+            },
+            error: (err: any) => console.error('Error obteniendo username', err)
+          });
+        }
       },
       error: (err: any) => console.error('Error cargando usuario', err)
     });
@@ -209,4 +218,3 @@ export class ConfiguracionComponent implements OnInit {
     return this.usuarioIngesta.imc ? this.usuarioIngesta.imc.toFixed(1) : '0.0';
   }
 }
-

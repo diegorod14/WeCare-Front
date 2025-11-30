@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-
 :host {
   display: flex;
   justify-content: center;
@@ -8,7 +6,7 @@
   width: 100%;
   min-height: calc(100vh - 64px);
   background-color: #f8fafc; /* Fondo gris muy suave consistente */
-  font-family: 'Poppins', sans-serif;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   box-sizing: border-box;
 }
 
@@ -24,7 +22,7 @@
 
 mat-card-title {
   text-align: center;
-  font-family: 'Poppins', sans-serif; /* Unificamos fuente */
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 1.8rem;
   font-weight: 700;
   color: #1e293b; /* Color oscuro suave */
@@ -86,7 +84,7 @@ mat-form-field {
 input, mat-select {
   color: #334155;
   font-weight: 500;
-  font-family: 'Poppins', sans-serif;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* BOTONES */
@@ -108,7 +106,7 @@ button[type="submit"] {
   height: 48px;
   border-radius: 50px; /* Pill shape */
   font-weight: 600;
-  font-family: 'Poppins', sans-serif;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   box-shadow: 0 4px 15px rgba(76, 175, 80, 0.25);
   transition: all 0.2s ease;
   letter-spacing: 0.5px;
@@ -130,7 +128,7 @@ button[type="submit"]:disabled {
 button[type="button"] {
   color: #64748b;
   font-weight: 600;
-  font-family: 'Poppins', sans-serif;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   padding: 0 24px;
   height: 48px;
   border-radius: 50px;

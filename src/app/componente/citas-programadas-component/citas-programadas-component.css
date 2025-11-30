@@ -1,159 +1,151 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-
-:host {
-  display: block;
-  font-family: 'Poppins', sans-serif !important;
-}
-
-/* Forzar fuente en Material */
-::ng-deep .mat-expansion-panel,
-::ng-deep .mat-expansion-panel-header,
-::ng-deep .mat-expansion-panel-content,
-::ng-deep .mat-form-field {
-  font-family: 'Poppins', sans-serif !important;
-}
-
+/* --- CONTENEDOR PRINCIPAL --- */
 .citas-container {
-  max-width: 1000px;
+  max-width: 1000px; /* Un poco más ancho para las cards internas */
   margin: 0 auto;
-  padding: 40px 16px 80px;
+  padding: 40px 20px 80px;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  box-sizing: border-box;
+  background-color: #f8fafc; /* Match usuario-component background */
+  min-height: 100vh;
 }
 
-/* --- 1. HEADER LIMPIO (Como la imagen) --- */
+/* --- HEADER Y BUSCADOR --- */
 .header-section {
   text-align: center;
+  margin-bottom: 40px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.page-subtitle {
+  color: #64748b;
+  font-size: 16px;
   margin-bottom: 30px;
 }
 
-.citas-title {
-  font-size: 32px; /* Un poco más grande */
-  font-weight: 700;
-  color: #0f172a; /* Negro suave */
-  margin: 0 0 8px 0;
-  letter-spacing: -0.5px;
-}
-
-.citas-subtitle {
-  font-size: 16px;
-  color: #64748b; /* Gris texto */
-  margin: 0;
-  font-weight: 400;
-}
-
-/* --- 2. BUSCADOR CENTRADO --- */
-.search-section {
+.search-wrapper {
   display: flex;
-  justify-content: center; /* Centrado horizontal */
-  margin-bottom: 40px;
+  justify-content: center;
+}
+
+.search-input-field {
   width: 100%;
+  max-width: 500px;
 }
 
-.search-input {
-  width: 100%;
-  max-width: 600px; /* Ancho máximo igual a la imagen */
-  font-size: 15px;
+/* Override para hacer el buscador REDONDO (Píldora) */
+::ng-deep .search-input-field .mat-mdc-text-field-wrapper {
+  background-color: white !important;
+  border-radius: 50px !important;
+  padding-left: 20px !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
-/* Estilos para limpiar el input de Material */
-::ng-deep .search-input .mat-form-field-wrapper {
-  padding-bottom: 0;
+::ng-deep .search-input-field .mat-mdc-form-field-subscript-wrapper {
+  display: none;
 }
 
-::ng-deep .search-input .mat-form-field-outline {
-  background-color: #ffffff; /* Fondo blanco */
-  border-radius: 8px;
-  color: #cbd5e1; /* Color de borde suave */
-}
-
-/* Icono Lupa */
-::ng-deep .search-input .mat-icon {
-  color: #64748b;
-  margin-right: 8px;
-}
-
-/* --- ESTILO DEL ACORDEÓN --- */
-.usuario-panel {
+/* --- ACORDEÓN / PANELES DE USUARIO --- */
+.user-panel {
   background: #fff !important;
   border-radius: 16px !important;
   margin-bottom: 24px !important;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.04) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03) !important;
   border: 1px solid #f1f5f9;
   overflow: hidden;
 }
 
-.usuario-header {
+/* Header del Acordeón */
+.panel-header {
   height: auto !important;
-  padding: 20px 24px !important;
-  border-left: 6px solid #6366f1;
+  padding: 16px 24px !important;
   background-color: #ffffff;
-  transition: background-color 0.2s;
-}
-
-.usuario-header:hover {
-  background-color: #f8fafc !important;
-}
-
-/* Limpieza de estilos default de Material */
-::ng-deep .mat-expansion-panel-header.cdk-keyboard-focused,
-::ng-deep .mat-expansion-panel-header.cdk-program-focused,
-::ng-deep .mat-expansion-panel:not([class*=mat-elevation-z]) {
-  background-color: #ffffff;
-  box-shadow: none !important;
 }
 
 .header-content {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   width: 100%;
-  position: relative;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
-.user-main-info {
+/* Mini Avatar en el header */
+.mini-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #eff6ff;
+  color: #3b82f6;
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 4px;
-}
-
-.usuario-name {
-  font-size: 18px;
+  justify-content: center;
   font-weight: 700;
-  color: #0f172a;
-}
-
-.usuario-username {
   font-size: 14px;
-  color: #6366f1;
-  font-weight: 600;
-  background: #e0e7ff;
-  padding: 2px 8px;
-  border-radius: 12px;
+  border: 1px solid #dbeafe;
 }
 
-.usuario-contact { font-size: 13px; color: #64748b; }
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
 
-.expand-icon {
-  position: absolute;
-  right: 0; top: 50%;
-  transform: translateY(-50%);
+.name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.username {
+  font-size: 13px;
+  color: #6366f1;
+  font-weight: 500;
+}
+
+.spacer { flex: 1; }
+
+.contact-pill {
+  background: #f8fafc;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.contact-pill mat-icon { font-size: 16px; width: 16px; height: 16px; }
+
+/* Icono de expandir personalizado */
+.custom-toggle {
   color: #94a3b8;
-  transition: transform 0.3s;
+  transition: transform 0.3s ease;
 }
 
-.mat-expanded .expand-icon {
-  transform: translateY(-50%) rotate(180deg);
+.mat-expanded .custom-toggle {
+  transform: rotate(180deg);
   color: #6366f1;
 }
 
-/* --- CONTENIDO INTERNO --- */
+/* --- CUERPO DEL PANEL (CITAS) --- */
 ::ng-deep .mat-expansion-panel-body {
-  padding: 0 24px 24px 24px !important;
+  padding: 0 24px 30px 24px !important;
+  background: #fcfcfc; /* Fondo interior muy sutil */
 }
 
-.fecha-block { margin-top: 30px; }
-.fecha-block:first-child { margin-top: 10px; }
+.date-group {
+  margin-top: 30px;
+}
+.date-group:first-child { margin-top: 10px; }
 
-.fecha-subtle-title {
+.date-header {
   font-size: 14px;
   font-weight: 600;
   color: #475569;
@@ -163,69 +155,111 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  border-bottom: 1px dashed #e2e8f0;
   padding-bottom: 8px;
-  border-bottom: 1px solid #e2e8f0;
 }
 
-.fecha-subtle-title mat-icon { font-size: 18px; width: 18px; height: 18px; color: #94a3b8; }
+.date-header mat-icon { font-size: 18px; width: 18px; height: 18px; color: #94a3b8; }
 
-/* --- GRID DE CITAS (Horizontal y alineado arriba) --- */
-.citas-grid {
+/* --- GRID DE CARDS INTERNAS --- */
+.cards-grid {
   display: grid;
-  /* Min 200px por tarjeta, auto-fill para llenar horizontalmente */
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  /* Tarjetas responsive automáticas */
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
-  width: 100%;
-  align-items: start; /* Evita que se estiren verticalmente */
+  align-items: start;
 }
 
-.cita-item {
-  background-color: #ffffff;
-  border: 1px solid #e2e8f0;
+/* ESTILO DE LA TARJETA DE CITA INDIVIDUAL */
+.cita-card {
+  background: white;
   border-radius: 12px;
-  padding: 16px;
+  padding: 20px;
   position: relative;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+  border: 1px solid #e2e8f0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-  transition: all 0.2s ease;
-  overflow: hidden;
-  height: auto; /* Altura automática según contenido */
+  gap: 12px;
 }
 
-.cita-item:hover {
+.cita-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 15px rgba(0,0,0,0.06);
-  border-color: #6366f1;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  border-color: #cbd5e1;
 }
 
-.cita-top-border {
-  position: absolute; top: 0; left: 0; width: 100%; height: 4px;
-  background-color: #6366f1;
+/* Acento superior (Mismo estilo que usuario) */
+.card-accent {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 4px;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
 }
 
-.cita-info { display: flex; flex-direction: column; gap: 2px; }
-.label { font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; }
-.value-time { font-size: 16px; font-weight: 700; color: #1e293b; }
-.type-text { font-size: 12px; font-weight: 600; color: #334155; }
-.motivo-text { font-size: 12px; font-weight: 400; color: #334155; line-height: 1.4; }
+.cita-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.value-large {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.value-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.motivo-desc {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.4;
+  background: #f8fafc;
+  padding: 8px;
+  border-radius: 8px;
+}
+
 .full-width { grid-column: 1 / -1; }
 
-/* BADGES */
-.estado-badge {
-  display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; width: fit-content;
+/* --- BADGES DE ESTADO (Píldoras) --- */
+.status-badge {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  width: fit-content;
 }
-.estado-programada { background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; }
-.estado-pendiente { background: #ffedd5; color: #ea580c; border: 1px solid #fed7aa; }
-.estado-completada { background: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; }
-.estado-cancelada { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; }
 
-.loading-message, .no-citas { text-align: center; color: #64748b; margin-top: 40px; }
+.status-programada { background: #e0f2fe; color: #0284c7; }
+.status-pendiente { background: #ffedd5; color: #ea580c; }
+.status-completada { background: #dcfce7; color: #16a34a; }
+.status-cancelada { background: #fee2e2; color: #dc2626; }
 
-/* Responsive */
-@media (max-width: 600px) {
-  .usuario-header { padding: 16px !important; }
-  .user-main-info { flex-direction: column; align-items: flex-start; gap: 2px; }
-  .citas-grid { grid-template-columns: 1fr; }
+/* LOADING & EMPTY STATES */
+.state-message {
+  text-align: center;
+  padding: 40px;
+  color: #64748b;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
+.state-message mat-icon { font-size: 40px; width: 40px; height: 40px; opacity: 0.5; }

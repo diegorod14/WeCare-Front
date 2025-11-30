@@ -9,7 +9,7 @@
 }
 
 .main-container {
-  font-family: 'Poppins', sans-serif;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   background-color: var(--primary-green);
   position: relative;
   /* CLAVE: Altura total menos el navbar */

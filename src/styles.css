@@ -1,4 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #f8fafc;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  --app-background: #f8fafc;
+}
+
+/* Use Poppins for all titles and subtitles across the app */
+h1, h2, h3, h4, h5, h6,
+.mat-card-title,
+.mat-card-subtitle,
+.users-title, .usuario-title, .page-title,
+.users-subtitle, .usuario-subtitle, .page-subtitle {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+/* Stronger weights for titles vs subtitles */
+h1, h2, h3, h4, h5, h6, .mat-card-title, .users-title, .usuario-title, .page-title {
+  font-weight: 700 !important;
+}
+
+.mat-card-subtitle, .users-subtitle, .usuario-subtitle, .page-subtitle {
+  font-weight: 600 !important;
+}

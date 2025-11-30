@@ -1,7 +1,7 @@
 :host {
   display: block;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --navbar-height: 70px;
   --animation-curve: cubic-bezier(0.2, 0.8, 0.2, 1);
 }

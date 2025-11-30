@@ -12,6 +12,7 @@ import { forkJoin } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 
 interface CitasPorFecha {
   fecha: Date;
@@ -27,7 +28,7 @@ interface CitasPorUsuario {
 @Component({
   selector: 'app-citas-programadas',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatExpansionModule, MatIconModule, MatFormFieldModule, MatInputModule],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatExpansionModule, MatIconModule, MatFormFieldModule, MatInputModule, MatProgressSpinner],
   templateUrl: './citas-programadas-component.html',
   styleUrls: ['./citas-programadas-component.css']
 })

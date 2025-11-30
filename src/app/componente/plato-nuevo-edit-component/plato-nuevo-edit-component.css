@@ -1,5 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+/* Remove Google fonts import (centralized in styles.css) */
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap'); */
 
+/* font import removed; use global styles.css */
 :host {
   display: flex;
   justify-content: center;
@@ -8,7 +10,7 @@
   width: 100%;
   min-height: calc(100vh - 64px);
   background-color: #f8fafc; /* Fondo gris suave consistente */
-  font-family: 'Poppins', sans-serif;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   box-sizing: border-box;
 }
 
@@ -24,7 +26,6 @@
 
 mat-card-title {
   text-align: center;
-  font-family: 'Poppins', sans-serif;
   font-size: 1.8rem;
   font-weight: 700;
   color: #1e293b;
@@ -75,7 +76,7 @@ mat-form-field {
 input {
   color: #334155;
   font-weight: 500;
-  font-family: 'Poppins', sans-serif;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* BOTÓN DE REGISTRAR */
@@ -87,7 +88,7 @@ button[type="submit"] {
   border-radius: 50px; /* Pill shape */
   font-weight: 600;
   font-size: 1rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   box-shadow: 0 4px 15px rgba(76, 175, 80, 0.25);
   transition: all 0.2s ease;
   letter-spacing: 0.5px;
