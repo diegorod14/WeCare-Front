@@ -199,6 +199,22 @@
 /* Chips */
 ::ng-deep .mat-mdc-chip {
   font-weight: 500;
+  width: 200px !important;
+  height: 44px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+::ng-deep .mat-mdc-chip .mat-mdc-chip-action {
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+::ng-deep .mat-mdc-chip .mdc-evolution-chip__action-primary {
+  justify-content: center !important;
 }
 
 /* Responsive */

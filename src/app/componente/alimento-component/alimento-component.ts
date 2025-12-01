@@ -138,9 +138,7 @@ export class AlimentoComponent implements OnInit {
   }
 
   nuevoAlimento(): void {
-    this.alimentoSeleccionado = this.crearAlimentoVacio();
-    this.modoEdicion = false;
-    this.mostrarFormulario = true;
+    this.router.navigate(['/NuevoAlimento']);
   }
 
   editarAlimento(alimento: Alimento): void {

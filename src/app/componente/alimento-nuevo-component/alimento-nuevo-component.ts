@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
 
 import { AlimentoService } from '../../services/alimento-service';
 import { CategoriaService } from '../../services/categoria-service';
@@ -22,7 +23,8 @@ import { Categoria } from '../../model/categoria';
     MatInputModule,
     MatCardModule,
     MatButtonModule,
-    MatSelectModule
+    MatSelectModule,
+    MatIconModule
   ],
   templateUrl: './alimento-nuevo-component.html',
   styleUrl: './alimento-nuevo-component.css',
@@ -32,6 +34,7 @@ export class AlimentoNuevoComponent implements OnInit {
   categorias: Categoria[] = [];
   loading = false;
   error: string | null = null;
+  edicion = false;
 
   private fb = inject(FormBuilder);
   private router = inject(Router);
@@ -132,5 +135,9 @@ export class AlimentoNuevoComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  cancelar(): void {
+    this.router.navigate(['/Alimento']);
   }
 }

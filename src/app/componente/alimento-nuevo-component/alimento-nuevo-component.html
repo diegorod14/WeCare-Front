@@ -1,53 +1,87 @@
-<mat-card class="example-card">
-  <mat-card-title>Nuevo Alimento</mat-card-title>
-  <mat-card-content>
-    <form [formGroup]="alimentoForm" class="form-container" (ngSubmit)="onSubmit()">
-      <mat-form-field appearance="outline">
-        <mat-label>Nombre</mat-label>
-        <input matInput formControlName="nombre" placeholder="Nombre del alimento" />
-        <mat-error *ngIf="alimentoForm.get('nombre')?.hasError('required')">El nombre es obligatorio</mat-error>
-        <mat-error *ngIf="alimentoForm.get('nombre')?.hasError('maxlength')">Máx 200 caracteres</mat-error>
+<div class="panel-action">
+
+  <div class="action-header">
+    <h3>{{ edicion ? 'Editar Alimento' : 'Agregar Nuevo Alimento' }}</h3>
+    <p class="action-subtitle">
+      Completa los datos para actualizar la información nutricional del alimento.
+    </p>
+  </div>
+
+  <form [formGroup]="alimentoForm" (ngSubmit)="onSubmit()" class="builder-form">
+
+    <!-- CARD: Datos Básicos -->
+    <div class="form-card">
+      <h4><mat-icon>restaurant</mat-icon> Información General</h4>
+
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Nombre del Alimento</mat-label>
+        <input matInput formControlName="nombre" placeholder="Ej: Pollo a la Parrilla">
+        <mat-icon matPrefix>local_dining</mat-icon>
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Proteínas (g)</mat-label>
-        <input matInput type="number" formControlName="proteina" placeholder="0" />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Carbohidratos (g)</mat-label>
-        <input matInput type="number" formControlName="carbohidrato" placeholder="0" />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Grasas (g)</mat-label>
-        <input matInput type="number" formControlName="grasa" placeholder="0" />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Calorías (kcal)</mat-label>
-        <input matInput type="number" formControlName="calorias" placeholder="0" />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Fibra (g)</mat-label>
-        <input matInput type="number" formControlName="fibra" placeholder="0" />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" class="w-100">
         <mat-label>Categoría</mat-label>
-        <mat-select formControlName="categoriaId" placeholder="Selecciona una categoría">
+        <mat-select formControlName="categoriaId">
           <mat-option *ngFor="let c of categorias" [value]="c.id">{{ c.nombre }}</mat-option>
         </mat-select>
-        <mat-error *ngIf="alimentoForm.get('categoriaId')?.hasError('required')">Seleccione una categoría</mat-error>
+        <mat-icon matPrefix>category</mat-icon>
       </mat-form-field>
+    </div>
 
-      <div class="actions">
-        <button type="submit" mat-raised-button color="primary" [disabled]="loading">Guardar</button>
-        <button type="button" mat-button (click)="alimentoForm.reset()" [disabled]="loading">Limpiar</button>
+    <!-- CARD: Nutrientes -->
+    <div class="form-card">
+      <h4><mat-icon>science</mat-icon> Valores Nutricionales (por 100g)</h4>
+
+      <div class="nutrients-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Calorías (kcal)</mat-label>
+          <input matInput type="number" formControlName="calorias">
+          <mat-icon matPrefix>local_fire_department</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Proteínas (g)</mat-label>
+          <input matInput type="number" formControlName="proteina">
+          <mat-icon matPrefix>fitness_center</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Carbohidratos (g)</mat-label>
+          <input matInput type="number" formControlName="carbohidrato">
+          <mat-icon matPrefix>grain</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Grasas (g)</mat-label>
+          <input matInput type="number" formControlName="grasa">
+          <mat-icon matPrefix>water_drop</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fibra (g)</mat-label>
+          <input matInput type="number" formControlName="fibra">
+          <mat-icon matPrefix>favorite</mat-icon>
+        </mat-form-field>
       </div>
+    </div>
 
-      <div *ngIf="error" class="error">{{ error }}</div>
-    </form>
-  </mat-card-content>
-</mat-card>
+    <!-- Botones Finales -->
+    <div class="form-actions">
+      <button type="button" mat-button (click)="cancelar()">Cancelar</button>
+
+      <button type="submit"
+              mat-raised-button
+              color="primary"
+              [disabled]="!alimentoForm.valid || loading">
+        <mat-icon>{{ edicion ? 'update' : 'add' }}</mat-icon>
+        {{ edicion ? 'Guardar Cambios' : 'Crear Alimento' }}
+      </button>
+    </div>
+
+    <div *ngIf="error" class="error-message">
+      <mat-icon>error</mat-icon>
+      <span>{{ error }}</span>
+    </div>
+  </form>
+
+</div>
