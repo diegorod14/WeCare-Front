@@ -1,0 +1,204 @@
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.dialog-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  color: #2e7d32;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.dialog-header mat-icon {
+  color: #4caf50;
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+mat-dialog-content {
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.plato-info {
+  background-color: #f5f5f5;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.plato-info p {
+  margin: 0;
+  color: #555;
+  line-height: 1.6;
+}
+
+mat-card {
+  box-shadow: none;
+  border: 1px solid #e0e0e0;
+}
+
+.tabla-container {
+  overflow-x: auto;
+  margin-bottom: 16px;
+}
+
+.tabla-alimentos {
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tabla-alimentos th {
+  background-color: #f5f5f5;
+  color: #333;
+  font-weight: 600;
+  padding: 16px;
+}
+
+.tabla-alimentos td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.tabla-alimentos tr:hover {
+  background-color: #f9f9f9;
+}
+
+.categoria {
+  color: #666;
+  font-style: italic;
+  font-size: 12px;
+}
+
+/* Sección de Totales */
+.totales-container {
+  margin-top: 24px;
+  margin-bottom: 32px;
+  padding: 20px;
+  background-color: #dff2d9;
+  border: 2px solid #4caf50;
+  border-radius: 12px;
+  color: #1b5e20;
+}
+
+.totales-container h3 {
+  margin: 0 0 20px 0;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  color: #2e7d32;
+}
+
+.totales-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.total-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  border-left: 4px solid #4caf50;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+
+.total-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  border-left-color: #2e7d32;
+}
+
+.total-item mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+  color: #4caf50;
+}
+
+.total-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.total-label {
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+}
+
+.total-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+.sin-datos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: #666;
+}
+
+.sin-datos mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+  color: #bdbdbd;
+}
+
+.sin-datos p {
+  margin: 0;
+  font-size: 16px;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px;
+  color: #666;
+  font-size: 16px;
+}
+
+mat-dialog-actions {
+  padding: 16px 24px;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tabla-alimentos {
+    font-size: 14px;
+  }
+
+  .tabla-alimentos th,
+  .tabla-alimentos td {
+    padding: 8px;
+  }
+}
+

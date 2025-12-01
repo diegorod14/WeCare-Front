@@ -1,310 +1,258 @@
-/* Contenedor principal */
+/* Container Centrado */
 .registrar-comer-container {
-  padding: 24px;
-  max-width: 800px;
-  margin: 0 auto;
-  min-height: calc(100vh - 100px);
-}
-
-/* Loading */
-.loading-container {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 80px 24px;
-  color: #666;
+  min-height: 90vh; /* Centrado vertical */
+  padding: 20px;
+  background-color: #f4f6f8;
 }
 
-.spinner {
-  animation: spin 1s linear infinite;
-  font-size: 64px !important;
-  width: 64px !important;
-  height: 64px !important;
-  color: #3f51b5;
+/* Card Principal sin scroll interno */
+.main-card {
+  width: 100%;
+  max-width: 900px;
+  padding: 0 !important; /* Quitamos padding default de mat-card */
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.1);
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+/* GRID SYSTEM: La clave del diseño */
+.layout-grid {
+  display: grid;
+  grid-template-columns: 35% 65%; /* 35% Info, 65% Acción */
+  min-height: 450px; /* Altura fija o mínima para consistencia */
 }
 
-/* Card principal */
-.registrar-comer-card {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-}
-
-.registrar-comer-card mat-card-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+/* --- Panel Izquierdo (Info Estática) --- */
+.panel-info {
+  background: linear-gradient(135deg, #2e7d32, #43a047); /* Fondo verde elegante */
   color: white;
-  padding: 24px;
-  margin: -16px -16px 24px -16px;
-  border-radius: 12px 12px 0 0;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
-.registrar-comer-card mat-card-title {
+.categoria-badge {
+  background: rgba(255,255,255,0.2);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.panel-info h2 {
+  margin: 15px 0 5px 0;
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+.subtitle {
+  opacity: 0.8;
+  font-size: 14px;
+  margin-bottom: 30px;
+}
+
+/* Tabla Nutricional Minimalista */
+.nutrition-table {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nutri-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.nutri-label {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 24px !important;
-  font-weight: 500 !important;
-  color: white !important;
-  margin: 0 !important;
-}
-
-.registrar-comer-card mat-card-title mat-icon {
-  font-size: 32px;
-  width: 32px;
-  height: 32px;
-}
-
-/* Información del alimento */
-.alimento-info {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 20px;
-  border-radius: 12px;
-  margin-bottom: 24px;
-  color: white;
-}
-
-.alimento-info h3 {
-  margin: 0 0 8px 0;
-  font-size: 22px;
-  font-weight: 600;
-}
-
-.categoria-tag {
-  display: inline-block;
-  background-color: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  padding: 6px 16px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 500;
-  margin-bottom: 16px;
-}
-
-.valores-referencia {
-  margin-top: 16px;
-}
-
-.valores-referencia h4 {
-  margin: 0 0 12px 0;
+  gap: 8px;
   font-size: 14px;
-  font-weight: 500;
   opacity: 0.9;
 }
 
-.valores-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+.nutri-label mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
 }
 
-.valor-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px;
-  background-color: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border-radius: 8px;
-  font-size: 14px;
+.nutri-value {
+  font-weight: 600;
+  font-size: 16px;
 }
 
-.valor-item mat-icon {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
+/* Icono de fondo decorativo */
+.food-icon-bg {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  opacity: 0.1;
 }
 
-/* Formulario */
-.formulario-consumo {
+.food-icon-bg mat-icon {
+  font-size: 200px;
+  width: 200px;
+  height: 200px;
+}
+
+/* --- Panel Derecho (Acción) --- */
+.panel-action {
+  padding: 30px 40px;
+  background-color: white;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  justify-content: center; /* Centrar contenido verticalmente */
 }
 
-.cantidad-row,
-.fecha-row {
-  display: flex;
-  gap: 16px;
-}
-
-.cantidad-field {
-  flex: 2;
-}
-
-.unidad-field {
-  flex: 1;
-}
-
-.fecha-field,
-.hora-field {
-  flex: 1;
-}
-
-.full-width {
-  width: 100%;
-}
-
-/* Resumen calculado */
-.resumen-calculado {
-  margin-top: 8px;
-  padding: 20px;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  border-radius: 12px;
-  border: 2px solid #e0e7ff;
-}
-
-.resumen-calculado h4 {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 16px 0;
-  font-size: 16px;
-  font-weight: 600;
+.action-header h3 {
   color: #333;
+  margin-bottom: 24px;
+  font-weight: 600;
+  font-size: 20px;
 }
 
-.resumen-calculado h4 mat-icon {
-  font-size: 22px;
-  width: 22px;
-  height: 22px;
-  color: #3f51b5;
-}
-
-.resumen-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-}
-
-.resumen-item {
+.compact-form {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Hero Input Group */
+.hero-input-group {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.big-input {
+  flex: 2;
+  font-size: 18px; /* Texto más grande para el input principal */
+}
+
+.unit-input {
+  flex: 1;
+}
+
+/* Resultados en vivo (Highlight) */
+.live-results {
+  background-color: #f1f8e9; /* Verde muy pálido */
+  border: 1px solid #c5e1a5;
+  border-radius: 12px;
   padding: 16px;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.resumen-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+.result-pill {
+  display: flex;
+  flex-direction: column;
 }
 
-.resumen-item mat-icon {
-  font-size: 28px;
-  width: 28px;
-  height: 28px;
+.result-pill .lbl {
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #558b2f;
+  font-weight: 600;
 }
 
-.resumen-item.calorias mat-icon {
-  color: #ff9800;
+.result-pill .val {
+  font-size: 32px; /* Número gigante */
+  font-weight: 700;
+  color: #2e7d32;
+  line-height: 1;
 }
 
-.resumen-item.proteina mat-icon {
-  color: #66bb6a;
+.result-pill .val small {
+  font-size: 14px;
+  font-weight: 500;
 }
 
-.resumen-item.carbohidrato mat-icon {
-  color: #ffca28;
-}
-
-.resumen-item.grasa mat-icon {
-  color: #ef5350;
-}
-
-.resumen-detalle {
+.macros-mini {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  text-align: right;
 }
 
-.resumen-detalle .label {
-  font-size: 12px;
-  color: #666;
+.macro {
+  font-size: 13px;
   font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: #666;
 }
 
-.resumen-detalle .valor {
-  font-size: 18px;
-  font-weight: 700;
-  color: #333;
+.macro.p { color: #4caf50; } /* Proteína Green */
+.macro.c { color: #fbc02d; } /* Carbo Yellow */
+.macro.f { color: #e53935; } /* Fat Red */
+
+/* Secondary Inputs (Compactos) */
+.secondary-inputs {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-/* Actions */
-::ng-deep .mat-mdc-card-actions {
-  padding: 16px 24px !important;
-  border-top: 1px solid #e0e0e0;
-  margin: 24px -16px -16px -16px !important;
+.date-time-row {
+  display: flex;
+  gap: 16px;
 }
 
-/* Snackbar styles */
-::ng-deep .snackbar-success {
-  background-color: #4caf50 !important;
-  color: white !important;
+.date-time-row mat-form-field {
+  flex: 1;
 }
 
-::ng-deep .snackbar-error {
-  background-color: #f44336 !important;
-  color: white !important;
+.w-100 { width: 100%; }
+
+/* Botones */
+.action-buttons {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
 }
 
-::ng-deep .snackbar-warning {
-  background-color: #ff9800 !important;
-  color: white !important;
+.btn-save {
+  padding: 0 32px !important;
+  height: 48px !important;
+  font-size: 16px !important;
 }
 
-/* Loading state */
-button[disabled] {
-  opacity: 0.6;
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-  .valores-grid,
-  .resumen-grid {
-    grid-template-columns: 1fr;
+/* --- RESPONSIVE: Mobile --- */
+@media (max-width: 768px) {
+  .layout-grid {
+    grid-template-columns: 1fr; /* Una columna en móvil */
   }
 
-  .cantidad-row,
-  .fecha-row {
-    flex-direction: column;
+  .panel-info {
+    padding: 20px;
+    flex-direction: row; /* En móvil, info horizontal compacta */
+    align-items: center;
+    justify-content: space-between;
+    background: #2e7d32;
   }
 
-  .cantidad-field,
-  .unidad-field,
-  .fecha-field,
-  .hora-field {
-    width: 100%;
+  .nutrition-table, .subtitle, .food-icon-bg {
+    display: none; /* Ocultar detalles en móvil para ahorrar espacio */
   }
 
-  .resumen-detalle .valor {
-    font-size: 16px;
-  }
-}
+  .panel-info h2 { margin: 0; font-size: 20px; }
 
-/* Animaciones */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
+  .panel-action {
+    padding: 20px;
   }
-  to {
-    opacity: 1;
-    transform: scale(1);
+
+  .registrar-comer-container {
+    padding: 10px;
+    align-items: flex-start;
   }
 }
-
-.alimento-info,
-.resumen-calculado {
-  animation: fadeIn 0.3s ease-out;
-}
-

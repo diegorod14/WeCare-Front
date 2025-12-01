@@ -38,13 +38,13 @@ export class RegistrarComerComponent implements OnInit {
     alimentoId: 0,
     cantidad: 100,
     unidad: 'g',
-    fechaConsumo: new Date().toISOString().split('T')[0],
-    horaConsumo: new Date().toTimeString().split(' ')[0].substring(0, 5),
+    fechaConsumo: '',
+    horaConsumo: '',
     nota: ''
   };
 
   cargando: boolean = false;
-  usuarioId: number = 1; // TODO: Obtener del LoginService
+  usuarioId: number = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -52,9 +52,24 @@ export class RegistrarComerComponent implements OnInit {
     private comerService: ComerService,
     private alimentoService: AlimentoService,
     private snackBar: MatSnackBar
-  ) {}
+  ) {
+    // Inicializar fecha y hora local en el constructor
+    this.consumoRequest.fechaConsumo = this.getLocalDate();
+    this.consumoRequest.horaConsumo = this.getLocalTime();
+  }
 
   ngOnInit(): void {
+    // Obtener el ID del usuario del token (formato token\nuserid o JWT)
+    const token = localStorage.getItem('token');
+    const userId = this.extractUserIdFromToken(token);
+
+    if (!userId) {
+      this.mostrarMensaje('⚠️ Sesión inválida. Por favor, inicie sesión nuevamente.', 'warning');
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.usuarioId = userId;
+
     // Obtener el ID del alimento desde la ruta
     const alimentoId = this.route.snapshot.queryParams['alimentoId'];
 
@@ -95,6 +110,7 @@ export class RegistrarComerComponent implements OnInit {
     }
 
     this.cargando = true;
+
     this.comerService.registrarConsumo(this.usuarioId, this.consumoRequest).subscribe({
       next: (response) => {
         this.mostrarMensaje(
@@ -105,7 +121,10 @@ export class RegistrarComerComponent implements OnInit {
 
         // Redirigir al dashboard después de 1.5 segundos
         setTimeout(() => {
-          this.router.navigate(['/dashboard']);
+          // Forzar navegación y recarga
+          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+            this.router.navigate(['/dashboard']);
+          });
         }, 1500);
       },
       error: (error) => {
@@ -213,5 +232,37 @@ export class RegistrarComerComponent implements OnInit {
       panelClass: [`snackbar-${tipo}`]
     });
   }
-}
 
+  /**
+   * Extrae el userId desde el token JWT almacenado en localStorage
+   */
+  private extractUserIdFromToken(token: string | null): number | null {
+    if (!token) return null;
+    try {
+      return JSON.parse(atob(token.split('.')[1]))?.userId || null;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Obtiene la fecha local en formato YYYY-MM-DD sin problemas de timezone
+   */
+  private getLocalDate(): string {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  /**
+   * Obtiene la hora local en formato HH:mm sin problemas de timezone
+   */
+  private getLocalTime(): string {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
+  }
+}

@@ -52,6 +52,18 @@
   text-align: left;
 }
 
+/* Centrar el título de la columna Acciones */
+.tabla-platos th.mat-column-acciones {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Centrar las celdas de Acciones */
+.tabla-platos td.mat-column-acciones {
+  text-align: center;
+  vertical-align: middle;
+}
+
 /* Celdas de la tabla */
 .tabla-platos td {
   padding: 16px 8px;
@@ -64,39 +76,34 @@
 
 /* Columna Acciones */
 .mat-column-acciones {
-  width: 140px;
-  text-align: center;
+  width: 220px;
 }
 
-/* Contenido de la celda de acciones */
 .acciones-cell {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 8px;
 }
 
-/* Botones de icono: solo icono, sin fondo ni borde raro */
 .acciones-cell button.mat-icon-button {
   background: none !important;
   box-shadow: none !important;
-  width: auto !important;
-  height: auto !important;
+  width: 40px !important;
+  height: 40px !important;
   padding: 0 !important;
   margin: 0 !important;
 }
 
-/* Iconos dentro de la columna acciones */
 .acciones-cell mat-icon {
-  font-size: 22px;
-  width: 22px;
-  height: 22px;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
   color: #424242;
   cursor: pointer;
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
-/* Hover sobre iconos */
 .acciones-cell mat-icon:hover {
   color: #000;
   transform: scale(1.15);

@@ -27,9 +27,9 @@
 .objetivos-page {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   min-height: 100vh;
-  padding-top: 60px;
+  padding-top: 0;
   background-color: #dff2d9;
   position: relative;
 }

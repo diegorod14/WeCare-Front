@@ -3,6 +3,7 @@ import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {Observable, Subject} from 'rxjs';
 import {Plato} from '../model/plato';
+import {PlatoAlimento} from '../model/plato-alimento';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +42,14 @@ export class PlatoService {
       next: (data) => { this.setList(data);
         error: (err: any) => console.log(err)}
     })
+  }
+  obtenerPlatoConAlimentos(platoId: number): Observable<any> {
+    return this.httpClient.get<any>(`${this.url}/plato/${platoId}/alimentos-detallados`);
+  }
+
+
+  guardarPlatoAlimento(platoAlimento: PlatoAlimento): Observable<any> {
+    return this.httpClient.post(`${this.url}/plato-alimento`, platoAlimento);
   }
 }
 

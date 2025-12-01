@@ -1,9 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router, NavigationEnd } from '@angular/router';
+import { filter, Subscription } from 'rxjs';
 import { UsuarioInformacion } from '../../model/usuario-informacion';
 import { UsuarioIngesta } from '../../model/usuario-ingesta';
 import { Objetivo } from '../../model/objetivo';
@@ -30,7 +31,7 @@ interface MacroItem {
   templateUrl: './dashboard-component.html',
   styleUrl: './dashboard-component.css'
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   usuarioInformacion: UsuarioInformacion = new UsuarioInformacion();
   usuarioIngesta: UsuarioIngesta = new UsuarioIngesta();
   objetivo: Objetivo = new Objetivo();
@@ -55,6 +56,9 @@ export class DashboardComponent implements OnInit {
   macrosConsumidos: MacroItem[] = [];
   macrosConsumidosGradient = '';
 
+  // Subscription para limpiar
+  private routerSubscription?: Subscription;
+
   // Exponer Math para el template
   Math = Math;
 
@@ -71,14 +75,33 @@ export class DashboardComponent implements OnInit {
   private usuarioObjService = inject(UsuarioObjetivoServices);
   private objetivoService = inject(ObjetivoServices);
   private comerService = inject(ComerService);
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.cargarDatosCompletos();
+
+    // Suscribirse a eventos de navegación para recargar datos
+    this.routerSubscription = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      // Recargar solo si navegamos al dashboard
+      if (event.url === '/dashboard' || event.urlAfterRedirects === '/dashboard') {
+        this.cargarDatosCompletos();
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    // Limpiar suscripción
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
   }
 
   cargarDatosCompletos(): void {
     const token = localStorage.getItem('token');
     const userId = this.extractUserIdFromToken(token);
+
     if (userId) {
       this.cargarDatos(userId);
     } else {
@@ -91,7 +114,9 @@ export class DashboardComponent implements OnInit {
 
   private cargarDatos(userId: number): void {
     this.usuarioService.listId(userId).subscribe({
-      next: (u: any) => this.nombreUsuario = u.nombres || 'Usuario',
+      next: (u: any) => {
+        this.nombreUsuario = u.nombres || 'Usuario';
+      },
       error: (err: any) => console.error('Error cargando usuario', err)
     });
 
@@ -110,7 +135,6 @@ export class DashboardComponent implements OnInit {
         this.pesoIdeal = ingesta.pesoIdeal;
         this.imc = ingesta.imc;
         this.calcularDerivados();
-        console.log('Datos de ingesta recalculados desde el servidor:', ingesta);
       },
       error: (err: any) => console.error('Error actualizando ingesta usuario', err)
     });
@@ -118,8 +142,11 @@ export class DashboardComponent implements OnInit {
     this.usuarioObjService.findByUsuarioId(userId).subscribe({
       next: (objs: any) => {
         if (objs && objs.length > 0) {
-          this.objetivoService.findById(objs[objs.length - 1].objetivo_id).subscribe({
-            next: (obj: any) => this.objetivo = obj,
+          const ultimoObjetivoId = objs[objs.length - 1].objetivo_id;
+          this.objetivoService.findById(ultimoObjetivoId).subscribe({
+            next: (obj: any) => {
+              this.objetivo = obj;
+            },
             error: (err: any) => console.error('Error cargando objetivo', err)
           });
         }
@@ -181,7 +208,11 @@ export class DashboardComponent implements OnInit {
     this.cargandoProgreso = true;
     this.errorProgreso = '';
 
-    this.comerService.obtenerResumenDeHoy(userId).subscribe({
+    // Obtener fecha local para evitar problemas de timezone
+    const fechaHoy = this.getLocalDate();
+
+    // Usar endpoint con fecha específica en lugar de "hoy" para evitar problemas de timezone
+    this.comerService.obtenerResumenDelDia(userId, fechaHoy).subscribe({
       next: (resumen: ResumenDiario) => {
         this.resumenDiario = resumen;
         this.progresoNutricional = resumen.progreso;
@@ -200,7 +231,9 @@ export class DashboardComponent implements OnInit {
    * Calcula los macros consumidos del día para visualización
    */
   private calcularMacrosConsumidos(): void {
-    if (!this.progresoNutricional) return;
+    if (!this.progresoNutricional) {
+      return;
+    }
 
     const pro = this.progresoNutricional.consumidoProteina || 0;
     const carb = this.progresoNutricional.consumidoCarbohidrato || 0;
@@ -259,5 +292,16 @@ export class DashboardComponent implements OnInit {
       default:
         return 'help';
     }
+  }
+
+  /**
+   * Obtiene la fecha local en formato YYYY-MM-DD sin problemas de timezone
+   */
+  private getLocalDate(): string {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }

@@ -18,8 +18,10 @@ import { Router, RouterLink } from '@angular/router';
 import { Plato } from '../../model/plato';
 import { PlatoService } from '../../services/plato-service';
 import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogo } from './confirm-dialogo/confirm-dialogo';
+import { Alimentos } from './alimentos/alimentos';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 
@@ -47,6 +49,7 @@ import { MatIcon } from '@angular/material/icon';
     MatIcon,
     MatIconButton,
     MatNoDataRow,
+    MatTooltip,
   ],
   templateUrl: './plato-component.html',
   styleUrl: './plato-component.css',
@@ -92,6 +95,15 @@ export class PlatoComponent {
   // 👉 Botón de editar (icono lápiz)
   editar(element: any) {
     this.route.navigate(['/nuevo-edit', element.id]);
+  }
+
+  // 👉 Botón de ver alimentos detallados
+  verAlimentos(platoId: number) {
+    const dialogRef = this.dialog.open(Alimentos, {
+      width: '80%',
+      maxWidth: '1200px',
+      data: { platoId: platoId }
+    });
   }
 
   // 👉 Botón de eliminar (icono tacho)

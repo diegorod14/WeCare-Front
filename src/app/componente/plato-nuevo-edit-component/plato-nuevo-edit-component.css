@@ -1,119 +1,341 @@
-/* Remove Google fonts import (centralized in styles.css) */
-/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap'); */
-
-/* font import removed; use global styles.css */
-:host {
+/* ===========================
+   Layout Principal (Split View)
+   =========================== */
+.plate-editor-container {
   display: flex;
+  align-items: center;
   justify-content: center;
-  align-items: flex-start; /* Alineado arriba */
-  padding: 40px 20px;
+  min-height: 90vh;
+  padding: 20px;
+  background-color: #f4f6f8;
+  font-family: 'Roboto', sans-serif;
+}
+
+.main-card {
   width: 100%;
-  min-height: calc(100vh - 64px);
-  background-color: #f8fafc; /* Fondo gris suave consistente */
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  box-sizing: border-box;
+  max-width: 1000px; /* Un poco más ancho para acomodar la tabla */
+  padding: 0 !important;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+  background: white;
 }
 
-.example-card {
-  max-width: 500px; /* Un poco más estrecho para plato, que tiene menos campos */
-  width: 100%;
-  padding: 40px;
-  border-radius: 24px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05); /* Sombra difusa moderna */
-  background: #ffffff;
-  border: 1px solid #f1f5f9;
+.layout-grid {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 0;
+  min-height: 700px;
+  max-height: calc(100vh - 120px);
 }
 
-mat-card-title {
-  text-align: center;
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #1e293b;
-  margin-bottom: 30px !important;
-  letter-spacing: -0.5px;
-}
-
-/* GRID DEL FORMULARIO */
-.form-container {
+/* ===========================
+   Panel Izquierdo (Resumen/Totales)
+   =========================== */
+.panel-info {
+  background: linear-gradient(135deg, #2e7d32, #1b5e20); /* Verde oscuro elegante */
+  color: white;
+  padding: 30px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  position: relative;
+  border-right: 1px solid rgba(0,0,0,0.05);
 }
 
-/* ESTILOS DE INPUTS (Modernos y limpios) */
-mat-form-field {
+.badge {
+  background: rgba(255,255,255,0.15);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.plate-header-preview h2 {
+  font-size: 24px;
+  margin: 15px 0 5px 0;
+  line-height: 1.2;
+  word-wrap: break-word;
+}
+
+.subtitle {
+  font-size: 13px;
+  opacity: 0.8;
+  margin-bottom: 30px;
+  font-style: italic;
+}
+
+/* Caja de Totales */
+.total-summary {
+  background: rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 20px;
+  backdrop-filter: blur(5px);
+}
+
+.big-number {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 15px;
+}
+
+.big-number .lbl { font-size: 12px; text-transform: uppercase; opacity: 0.8; }
+.big-number .val { font-size: 48px; font-weight: 700; line-height: 1; margin: 5px 0; }
+.big-number .unit { font-size: 14px; opacity: 0.9; }
+
+/* Macros Breakdown */
+.macros-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.macro-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.macro-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.2);
+}
+
+.macro-icon mat-icon { font-size: 18px; width: 18px; height: 18px; }
+
+.macro-data {
+  display: flex;
+  flex-direction: column;
+}
+
+.macro-data .label { font-size: 11px; opacity: 0.8; }
+.macro-data .value { font-weight: 600; font-size: 14px; }
+
+/* Colores para macros */
+.macro-row.p .macro-icon { color: #81c784; } /* Proteína */
+.macro-row.c .macro-icon { color: #fff176; } /* Carbos */
+.macro-row.f .macro-icon { color: #e57373; } /* Grasas */
+
+.bg-decoration {
+  position: absolute;
+  bottom: -30px;
+  right: -30px;
+  opacity: 0.05;
+}
+.bg-decoration mat-icon { font-size: 250px; width: 250px; height: 250px; }
+
+/* ===========================
+   Panel Derecho (Constructor)
+   =========================== */
+.panel-action {
+  padding: 30px 40px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: calc(100vh - 120px);
+}
+
+.action-header h3 {
+  color: #333;
+  margin: 0 0 20px 0;
+  font-weight: 600;
+  font-size: 20px;
+  color: #2e7d32;
+}
+
+.w-100 { width: 100%; }
+
+/* Inputs básicos */
+.basic-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.separator {
+  height: 1px;
+  background: #eee;
+  margin: 20px 0;
+}
+
+/* Constructor de Ingredientes */
+.ingredients-builder h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #555;
+  font-size: 14px;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.add-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.select-food { flex: 2; }
+.input-qty { flex: 1; max-width: 120px; }
+
+.btn-add {
+  margin-top: 4px !important;
+  box-shadow: none !important;
+}
+
+/* Tabla Limpia */
+.ingredients-list-wrapper {
+  max-height: 350px;
+  overflow-y: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  background-color: #f8f9f7;
+}
+
+.clean-table {
   width: 100%;
 }
 
-/* Quitamos el borde por defecto de Material y ponemos el nuestro */
-::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
-  color: #e2e8f0; /* Borde gris muy claro inicial */
-  background-color: #ffffff;
-  border-radius: 12px;
-}
-
-::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-start,
-::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-end {
-  border-radius: 12px !important;
-}
-
-/* Cuando está enfocado (verde) */
-::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
-  color: #4CAF50;
-}
-
-/* Etiquetas */
-::ng-deep .mat-form-field-label {
-  color: #64748b;
-  font-weight: 500;
-}
-
-::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
-  color: #4CAF50;
-}
-
-/* Texto dentro del input */
-input {
-  color: #334155;
-  font-weight: 500;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-}
-
-/* BOTÓN DE REGISTRAR */
-button[type="submit"] {
-  background-color: #4CAF50;
-  color: white;
-  width: 100%; /* Botón ancho completo se ve mejor en formularios cortos */
-  height: 50px;
-  border-radius: 50px; /* Pill shape */
+.clean-table th {
+  background: #f9f9f9;
+  color: #666;
+  font-size: 12px;
   font-weight: 600;
-  font-size: 1rem;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.25);
-  transition: all 0.2s ease;
-  letter-spacing: 0.5px;
-  border: none;
-  cursor: pointer;
-  margin-top: 10px;
+  padding: 12px 16px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #eee;
 }
 
-button[type="submit"]:hover:not(:disabled) {
-  background-color: #43A047;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.35);
+.clean-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f5f5f5;
+  font-size: 14px;
+  color: #333;
 }
 
-button[type="submit"]:disabled {
-  background-color: #e2e8f0;
-  color: #94a3b8;
-  box-shadow: none;
-  cursor: not-allowed;
-  transform: none;
+.fw-bold { font-weight: 500; }
+.sub-text { display: block; font-size: 11px; color: #999; }
+.text-primary { color: #2e7d32; font-weight: 600; }
+.text-right { text-align: right; }
+
+/* Estado Vacío */
+.empty-state {
+  text-align: center;
+  padding: 30px;
+  background: #fcfcfc;
+  border: 2px dashed #eee;
+  border-radius: 8px;
+  color: #999;
+  margin-bottom: 20px;
 }
 
-/* RESPONSIVE */
+/* Botones Finales */
+.form-actions {
+  margin-top: auto; /* Empuja los botones al fondo */
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+/* ===========================
+   Responsive Design
+   =========================== */
+@media (max-width: 1024px) {
+  .main-card {
+    max-width: 95vw;
+  }
+
+  .layout-grid {
+    grid-template-columns: 300px 1fr;
+    min-height: 600px;
+  }
+}
+
+@media (max-width: 800px) {
+  .layout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-info {
+    padding: 20px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .plate-header-preview { flex: 1; }
+  .total-summary { flex: 1; min-width: 200px; padding: 10px; }
+  .big-number { flex-direction: row; gap: 10px; align-items: baseline; margin-bottom: 5px; border: none; }
+  .big-number .val { font-size: 24px; }
+  .macros-breakdown { display: none; /* Ocultar detalles macro en header móvil para ahorrar espacio */ }
+  .bg-decoration { display: none; }
+
+  .panel-action { padding: 20px; }
+  .add-row { flex-wrap: wrap; }
+  .select-food { width: 100%; flex: 100%; }
+}
+
+@media (max-width: 768px) {
+  .layout-grid {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .panel-info {
+    min-height: 300px;
+    border-right: none;
+    border-bottom: 2px solid rgba(0,0,0,0.1);
+  }
+
+  .panel-action {
+    max-height: none;
+    min-height: auto;
+  }
+
+  .plate-editor-container {
+    min-height: auto;
+    padding: 10px;
+  }
+
+  .big-number .val {
+    font-size: 36px;
+  }
+}
+
 @media (max-width: 600px) {
-  .example-card {
-    padding: 24px;
+  .panel-info,
+  .panel-action {
+    padding: 20px;
+  }
+
+  .plate-header-preview h2 {
+    font-size: 20px;
+  }
+
+  .big-number .val {
+    font-size: 32px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions button {
+    width: 100%;
   }
 }
