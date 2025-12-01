@@ -747,6 +747,150 @@
   font-weight: 500;
 }
 
+/* Platos Consumidos */
+.platos-consumidos-section {
+  padding: 28px;
+  background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+  border-radius: 16px;
+  border: 1px solid #c8e6c9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.platos-consumidos-section h3 {
+  margin: 0 0 20px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.platos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.platos-lista::-webkit-scrollbar {
+  width: 8px;
+}
+
+.platos-lista::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.platos-lista::-webkit-scrollbar-thumb {
+  background: #4caf50;
+  border-radius: 10px;
+}
+
+.platos-lista::-webkit-scrollbar-thumb:hover {
+  background: #388e3c;
+}
+
+.plato-consumido-card {
+  padding: 18px;
+  background-color: white;
+  border-radius: 12px;
+  border: 1px solid #c8e6c9;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.plato-consumido-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: #4caf50;
+}
+
+.plato-consumido-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.plato-consumido-header mat-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+  color: #4caf50;
+}
+
+.plato-consumido-header strong {
+  flex: 1;
+  min-width: 120px;
+  font-size: 16px;
+  color: #333;
+  font-weight: 600;
+}
+
+.plato-consumido-header .hora {
+  font-size: 12px;
+  color: #999;
+  background-color: #f5f7fa;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.plato-consumido-header .total-calorias {
+  font-size: 14px;
+  color: #ff9800;
+  font-weight: 700;
+  background-color: #fff3e0;
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+.alimentos-del-plato {
+  padding-left: 32px;
+  border-left: 2px solid #c8e6c9;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.alimento-del-plato {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #666;
+}
+
+.alimento-del-plato mat-icon {
+  font-size: 12px;
+  width: 12px;
+  height: 12px;
+  color: #4caf50;
+}
+
+.alimento-nombre {
+  flex: 1;
+  font-weight: 500;
+  color: #333;
+}
+
+.alimento-cantidad {
+  font-size: 12px;
+  color: #999;
+  background-color: #f5f7fa;
+  padding: 2px 8px;
+  border-radius: 8px;
+}
+
+.alimento-calorias {
+  font-weight: 600;
+  color: #ff9800;
+}
+
 /* Responsive */
 @media (max-width: 968px) {
   .dashboard-content {

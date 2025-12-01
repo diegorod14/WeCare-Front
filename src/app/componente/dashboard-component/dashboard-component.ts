@@ -295,6 +295,46 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Obtiene los alimentos consumidos que NO vienen de un plato
+   */
+  get alimentosIndividuales() {
+    if (!this.resumenDiario?.alimentosConsumidos) return [];
+    return this.resumenDiario.alimentosConsumidos.filter(consumo =>
+      !consumo.nota || !consumo.nota.startsWith('Del plato:')
+    );
+  }
+
+  /**
+   * Agrupa los alimentos que vienen de platos
+   */
+  get platosConAlimentos() {
+    if (!this.resumenDiario?.alimentosConsumidos) return [];
+
+    const platoMap = new Map<string, any[]>();
+
+    this.resumenDiario.alimentosConsumidos.forEach(consumo => {
+      if (consumo.nota && consumo.nota.startsWith('Del plato:')) {
+        // Extraer nombre del plato de la nota
+        const match = consumo.nota.match(/Del plato: ([^.]+)/);
+        const platoNombre = match ? match[1] : 'Plato desconocido';
+
+        if (!platoMap.has(platoNombre)) {
+          platoMap.set(platoNombre, []);
+        }
+        platoMap.get(platoNombre)!.push(consumo);
+      }
+    });
+
+    // Convertir Map a array de objetos
+    return Array.from(platoMap.entries()).map(([nombre, alimentos]) => ({
+      nombre,
+      alimentos,
+      totalCalorias: alimentos.reduce((sum, a) => sum + (a.caloriasCalculadas || 0), 0),
+      horaConsumo: alimentos[0]?.horaConsumo
+    }));
+  }
+
+  /**
    * Obtiene la fecha local en formato YYYY-MM-DD sin problemas de timezone
    */
   private getLocalDate(): string {

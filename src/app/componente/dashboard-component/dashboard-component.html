@@ -202,11 +202,11 @@
         </div>
       </div>
 
-      <!-- Alimentos Consumidos Hoy -->
-      <div class="alimentos-consumidos-section" *ngIf="resumenDiario && resumenDiario.cantidadComidas > 0">
-        <h3>Alimentos Consumidos Hoy ({{ resumenDiario.cantidadComidas }})</h3>
+      <!-- Alimentos Consumidos Hoy (Individual) -->
+      <div class="alimentos-consumidos-section" *ngIf="alimentosIndividuales.length > 0">
+        <h3>Alimentos Consumidos Hoy ({{ alimentosIndividuales.length }})</h3>
         <div class="alimentos-lista">
-          <div class="alimento-consumido-card" *ngFor="let consumo of resumenDiario.alimentosConsumidos">
+          <div class="alimento-consumido-card" *ngFor="let consumo of alimentosIndividuales">
             <div class="alimento-consumido-header">
               <mat-icon>restaurant</mat-icon>
               <strong>{{ consumo.alimentoNombre }}</strong>
@@ -220,6 +220,29 @@
             <div class="alimento-consumido-nota" *ngIf="consumo.nota">
               <mat-icon>notes</mat-icon>
               <em>{{ consumo.nota }}</em>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Platos Consumidos Hoy -->
+      <div class="platos-consumidos-section" *ngIf="platosConAlimentos.length > 0">
+        <h3>Platos Consumidos Hoy ({{ platosConAlimentos.length }})</h3>
+        <div class="platos-lista">
+          <div class="plato-consumido-card" *ngFor="let plato of platosConAlimentos">
+            <div class="plato-consumido-header">
+              <mat-icon>set_meal</mat-icon>
+              <strong>{{ plato.nombre }}</strong>
+              <span class="hora">{{ plato.horaConsumo }}</span>
+              <span class="total-calorias">{{ plato.totalCalorias | number:'1.0-0' }} kcal</span>
+            </div>
+            <div class="alimentos-del-plato">
+              <div class="alimento-del-plato" *ngFor="let alimento of plato.alimentos">
+                <mat-icon>fiber_manual_record</mat-icon>
+                <span class="alimento-nombre">{{ alimento.alimentoNombre }}</span>
+                <span class="alimento-cantidad">{{ alimento.cantidad }} {{ alimento.unidad }}</span>
+                <span class="alimento-calorias">{{ alimento.caloriasCalculadas | number:'1.0-0' }} kcal</span>
+              </div>
             </div>
           </div>
         </div>

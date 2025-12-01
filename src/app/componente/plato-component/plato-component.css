@@ -26,6 +26,27 @@
   align-items: center;
 }
 
+/* Filtros */
+.filtros-card {
+  margin-bottom: 24px;
+}
+
+.filtros-container {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filtro-field {
+  flex: 1;
+  min-width: 250px;
+}
+
+.resumen-chips {
+  margin-top: 16px;
+}
+
 /* Tarjeta de tabla */
 .tabla-card {
   margin-top: 24px;
@@ -155,6 +176,73 @@ mat-paginator {
   min-height: 56px;
   justify-content: flex-end;
   padding: 0 20px;
+}
+
+/* Snackbar styles */
+::ng-deep .snackbar-success {
+  background-color: #4caf50 !important;
+  color: white !important;
+}
+
+::ng-deep .snackbar-error {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+
+::ng-deep .snackbar-warning {
+  background-color: #ff9800 !important;
+  color: white !important;
+}
+
+/* Chips */
+::ng-deep .mat-mdc-chip {
+  font-weight: 500;
+}
+
+/* Botón estilo "CONSUMIR" */
+.consumir-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1976d2;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: 0.2s ease;
+  text-transform: uppercase;
+}
+
+.consumir-btn mat-icon {
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
+  color: #1976d2;
+}
+
+/* Hover */
+.consumir-btn:hover {
+  background: #e3f2fd;
+  border-color: #bbdefb;
+}
+
+/* Columna Consumir */
+.mat-column-consumir {
+  width: 140px;
+  text-align: center;
+}
+
+/* Material overrides */
+::ng-deep .mat-mdc-form-field {
+  font-size: 14px;
+}
+
+::ng-deep .mat-mdc-tooltip {
+  font-size: 12px;
 }
 
 /* Responsive */

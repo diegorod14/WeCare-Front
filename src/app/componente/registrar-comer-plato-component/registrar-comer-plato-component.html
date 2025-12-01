@@ -1,0 +1,153 @@
+<div class="registrar-comer-plato-container">
+  <!-- Encabezado -->
+  <div class="header">
+    <h1>Consumir Plato: {{ platoNombre }}</h1>
+    <mat-icon class="back-icon" (click)="cancelar()" matTooltip="Volver atrás">
+      arrow_back
+    </mat-icon>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="cargando" class="loading-container">
+    <mat-icon class="spinner">refresh</mat-icon>
+    <p>Cargando alimentos del plato...</p>
+  </div>
+
+  <!-- Contenido -->
+  <div *ngIf="!cargando" class="contenido">
+    <!-- Tarjeta de información del plato -->
+    <mat-card class="plato-info-card">
+      <mat-card-header>
+        <mat-card-title>Alimentos en este plato</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-header">
+          <p><strong>Total de alimentos:</strong> {{ alimentosEnPlato.length }}</p>
+          <p><strong>Alimentos seleccionados:</strong> {{ alimentosSeleccionadosCount }}</p>
+        </div>
+
+        <!-- Botones de selección rápida -->
+        <div class="selection-buttons">
+          <button mat-button (click)="seleccionarTodos()">
+            <mat-icon>done_all</mat-icon>
+            Seleccionar Todo
+          </button>
+          <button mat-button (click)="deseleccionarTodos()">
+            <mat-icon>clear_all</mat-icon>
+            Deseleccionar Todo
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Tabla de alimentos -->
+    <mat-card class="tabla-card">
+      <mat-card-content>
+        <div class="tabla-container">
+          <table mat-table [dataSource]="alimentosEnPlato" class="tabla-alimentos">
+
+            <!-- Columna Seleccionar -->
+            <ng-container matColumnDef="select">
+              <th mat-header-cell *matHeaderCellDef class="mat-column-select">Consumir</th>
+              <td mat-cell *matCellDef="let element" class="mat-column-select">
+                <mat-checkbox [(ngModel)]="element.selected"></mat-checkbox>
+              </td>
+            </ng-container>
+
+            <!-- Columna Nombre -->
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef>Alimento</th>
+              <td mat-cell *matCellDef="let element">
+                <strong>{{ element.nombre }}</strong>
+              </td>
+            </ng-container>
+
+            <!-- Columna Cantidad -->
+            <ng-container matColumnDef="cantidad">
+              <th mat-header-cell *matHeaderCellDef>Cantidad</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.cantidad }}
+              </td>
+            </ng-container>
+
+            <!-- Columna Unidad -->
+            <ng-container matColumnDef="unidad">
+              <th mat-header-cell *matHeaderCellDef>Unidad</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.unidad }}
+              </td>
+            </ng-container>
+
+            <!-- Columna Información Nutricional -->
+            <ng-container matColumnDef="informacion">
+              <th mat-header-cell *matHeaderCellDef>Info. Nutricional (por 100g)</th>
+              <td mat-cell *matCellDef="let element">
+                <div class="nutri-badges">
+                  <span class="nutri-item protein">
+                    <mat-icon>fitness_center</mat-icon>
+                    {{ element.proteina | number:'1.1-1' }}g Proteína
+                  </span>
+
+                  <span class="nutri-item carbs">
+                    <mat-icon>local_fire_department</mat-icon>
+                    {{ element.carbohidrato | number:'1.1-1' }}g Carbs
+                  </span>
+
+                  <span class="nutri-item fat">
+                    <mat-icon>opacity</mat-icon>
+                    {{ element.grasa | number:'1.1-1' }}g Grasas
+                  </span>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Filas -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Formulario de fecha, hora y nota -->
+    <mat-card class="formulario-card">
+      <mat-card-header class="formulario-header">
+        <mat-card-title>Detalles del consumo</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="formulario-content">
+        <div class="formulario-container">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Fecha</mat-label>
+            <input matInput type="date" [(ngModel)]="fechaConsumo">
+            <mat-icon matSuffix>calendar_today</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Hora</mat-label>
+            <input matInput type="time" [(ngModel)]="horaConsumo">
+            <mat-icon matSuffix>schedule</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Nota (opcional)</mat-label>
+            <textarea matInput [(ngModel)]="nota" rows="3" placeholder="Agrega una nota sobre este consumo..."></textarea>
+            <mat-icon matSuffix>note</mat-icon>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Botones de acción -->
+    <div class="acciones">
+      <button mat-button (click)="cancelar()" [disabled]="cargando">
+        <mat-icon>cancel</mat-icon>
+        Cancelar
+      </button>
+      <button mat-raised-button color="primary" (click)="registrarConsumoPlato()" [disabled]="botonRegistrarDeshabilitado">
+        <mat-icon>done</mat-icon>
+        Registrar Consumo del Plato
+      </button>
+    </div>
+  </div>
+</div>
+

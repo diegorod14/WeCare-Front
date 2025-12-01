@@ -14,6 +14,52 @@
     </div>
   </div>
 
+  <!-- Filtros -->
+  <mat-card class="filtros-card">
+    <mat-card-content>
+      <div class="filtros-container">
+        <mat-form-field appearance="outline" class="filtro-field">
+          <mat-label>Buscar por nombre</mat-label>
+          <input matInput [(ngModel)]="filtroNombre" (ngModelChange)="aplicarFiltros()" placeholder="Nombre del plato">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filtro-field">
+          <mat-label>Filtrar por alimento</mat-label>
+          <mat-select [(ngModel)]="filtroAlimento" (ngModelChange)="aplicarFiltros()">
+            <mat-option value="">Todos los alimentos</mat-option>
+            <mat-option *ngFor="let alimento of alimentos" [value]="alimento.nombre">
+              {{ alimento.nombre }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matSuffix>filter_list</mat-icon>
+        </mat-form-field>
+
+        <button mat-raised-button color="accent" (click)="buscarPorAlimento()" [disabled]="!filtroAlimento">
+          <mat-icon>search</mat-icon>
+          Buscar por Alimento
+        </button>
+
+        <button mat-button (click)="limpiarFiltros()">
+          <mat-icon>clear</mat-icon>
+          Limpiar Filtros
+        </button>
+      </div>
+
+      <!-- Chips con resumen -->
+      <div class="resumen-chips">
+        <mat-chip-set>
+          <mat-chip>
+            Total: {{ platosFiltrados.length }} plato(s)
+          </mat-chip>
+          <mat-chip *ngIf="filtroAlimento" color="primary">
+            Filtro: {{ filtroAlimento }}
+          </mat-chip>
+        </mat-chip-set>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
   <!-- Tabla de platos -->
   <mat-card class="tabla-card">
     <mat-card-content>
@@ -44,13 +90,25 @@
             </td>
           </ng-container>
 
+          <!-- Columna Consumir -->
+          <ng-container matColumnDef="consumir">
+            <th mat-header-cell *matHeaderCellDef>Consumir</th>
+            <td mat-cell *matCellDef="let element" class="mat-column-consumir">
+              <button class="consumir-btn" (click)="consumirPlato(element.id)">
+                <mat-icon>restaurant</mat-icon>
+                CONSUMIR
+              </button>
+            </td>
+          </ng-container>
+
           <!-- Columna Acciones -->
           <ng-container matColumnDef="acciones">
             <th mat-header-cell *matHeaderCellDef>Acciones</th>
             <td mat-cell *matCellDef="let element" class="acciones-cell">
 
+
               <!-- Ver Alimentos -->
-              <button mat-icon-button color="accent" (click)="verAlimentos(element.id)" matTooltip="Ver Alimentos Detallados">
+              <button mat-icon-button color="primary" (click)="verAlimentos(element.id)" matTooltip="Ver Alimentos Detallados">
                 <mat-icon>restaurant_menu</mat-icon>
               </button>
 

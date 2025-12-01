@@ -17,6 +17,7 @@ import { UsuarioInfoComponent } from './componente/usuario-info-component/usuari
 import { ConfiguracionComponent } from './componente/configuracion-component/configuracion-component';
 import { CitasProgramadasComponent } from './componente/citas-programadas-component/citas-programadas-component';
 import { RegistrarComerComponent } from './componente/registrar-comer-component/registrar-comer-component';
+import { RegistrarComerPlatoComponent } from './componente/registrar-comer-plato-component/registrar-comer-plato-component';
 
 export const routes: Routes = [
   // Home y autenticación
@@ -35,10 +36,12 @@ export const routes: Routes = [
   // Alimentos
   { path: 'Alimento', component: AlimentoComponent },
   { path: 'NuevoAlimento', component: AlimentoNuevoComponent },
-  { path: 'registrar-comer', component: RegistrarComerComponent }, // ✅ NUEVA RUTA
+  { path: 'registrar-comer', component: RegistrarComerComponent },
+  { path: 'registrar-comer-plato', component: RegistrarComerPlatoComponent },
 
   // Platos
   { path: 'Plato', component: PlatoComponent },
+  { path: 'plato', component: PlatoComponent },
   { path: 'nuevo-edit', component: PlatoNuevoEditComponent },
   { path: 'nuevo-edit/:id', component: PlatoNuevoEditComponent },
 

@@ -47,6 +47,9 @@ export class PlatoService {
     return this.httpClient.get<any>(`${this.url}/plato/${platoId}/alimentos-detallados`);
   }
 
+  obtenerPlatosPorAlimento(alimentoId: number): Observable<Plato[]> {
+    return this.httpClient.get<Plato[]>(`${this.url}/alimento/${alimentoId}/platos`);
+  }
 
   guardarPlatoAlimento(platoAlimento: PlatoAlimento): Observable<any> {
     return this.httpClient.post(`${this.url}/plato-alimento`, platoAlimento);
