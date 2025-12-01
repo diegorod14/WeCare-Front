@@ -12,20 +12,21 @@
     <!-- CARD: Datos Básicos -->
     <div class="form-card">
       <h4><mat-icon>restaurant</mat-icon> Información General</h4>
+      <div class="basic-inputs-grid">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Nombre del Alimento</mat-label>
+          <input matInput formControlName="nombre" placeholder="Ej: Pollo a la Parrilla">
+          <mat-icon matPrefix>local_dining</mat-icon>
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Nombre del Alimento</mat-label>
-        <input matInput formControlName="nombre" placeholder="Ej: Pollo a la Parrilla">
-        <mat-icon matPrefix>local_dining</mat-icon>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Categoría</mat-label>
-        <mat-select formControlName="categoriaId">
-          <mat-option *ngFor="let c of categorias" [value]="c.id">{{ c.nombre }}</mat-option>
-        </mat-select>
-        <mat-icon matPrefix>category</mat-icon>
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Categoría</mat-label>
+          <mat-select formControlName="categoriaId">
+            <mat-option *ngFor="let c of categorias" [value]="c.id">{{ c.nombre }}</mat-option>
+          </mat-select>
+          <mat-icon matPrefix>category</mat-icon>
+        </mat-form-field>
+      </div>
     </div>
 
     <!-- CARD: Nutrientes -->
