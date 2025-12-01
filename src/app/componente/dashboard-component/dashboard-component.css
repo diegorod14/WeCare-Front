@@ -65,6 +65,7 @@
 
 .w-label {
   font-size: 12px;
+  text-align: center;
   font-weight: 600;
   color: #666;
   text-transform: uppercase;
@@ -73,6 +74,7 @@
 
 .w-value {
   font-size: 28px;
+  text-align: center;
   font-weight: 700;
   color: #333;
 }
@@ -84,7 +86,7 @@
 }
 
 .imc-section {
-  padding: 16px 24px;
+  padding: 25px 14px;
   background-color: #fff3e0;
   border-radius: 12px;
   border: 2px solid #ff9800;
@@ -99,6 +101,7 @@
 
 .imc-label {
   font-size: 14px;
+  padding-bottom: 10px;
   font-weight: 600;
   color: #666;
   text-transform: uppercase;
@@ -140,7 +143,7 @@
   font-size: 48px;
   font-weight: 700;
   color: #333;
-  margin-top: 8px;
+  margin-top: 28px;
 }
 
 .cal-value span {
@@ -200,12 +203,12 @@
 }
 
 .objective-info {
-  margin-top: 16px;
-  padding: 16px;
-  background-color: #f5f5f5;
+  margin-top: 5px;
+  padding: 5px;
+  background-color: white;
+  border: 1.5px solid #4caf50;
   border-radius: 8px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -215,14 +218,14 @@
 .obj-label {
   font-size: 12px;
   font-weight: 600;
-  color: #666;
+  color: #333333;
   text-transform: uppercase;
 }
 
 .obj-val {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
-  color: #3f51b5;
+  color: #333333;
 }
 
 .chart-wrapper {
@@ -244,7 +247,7 @@
 .center-white {
   width: 120px;
   height: 120px;
-  background-color: white;
+  background-color: #f4f3f6;
   border-radius: 50%;
 }
 
